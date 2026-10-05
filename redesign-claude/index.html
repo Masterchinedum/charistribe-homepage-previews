@@ -1,0 +1,1977 @@
+<!doctype html>
+<!--
+  ╔══════════════════════════════════════════════════════════════════════╗
+  ║  CHARIS TRIBE GLOBAL CHURCH — Home page redesign (Claude)            ║
+  ║  Single-file design: HTML + CSS + vanilla JS. No build step.         ║
+  ╠══════════════════════════════════════════════════════════════════════╣
+  ║  EDITING GUIDE                                                       ║
+  ║  • Colours & fonts ........ search "1. TOKENS" (all in :root)        ║
+  ║  • Page sections .......... search "SECTION:" in the HTML body       ║
+  ║  • Images ................. ./assets/ (swap files, keep the names)   ║
+  ║  • Service times / Live ... search "SERVICE_SCHEDULE" in the script  ║
+  ║  • Every word on the page lives in plain HTML — edit it in place.    ║
+  ╚══════════════════════════════════════════════════════════════════════╝
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Charis Tribe Global Church — Good News Always</title>
+<meta name="description" content="Charis Tribe Global Church — raising a community of world changers globally. Heralding the love of Jesus Christ and the ministry of the Holy Spirit. Lagos · Ibadan · Abuja · UK · Canada · Online.">
+<meta name="theme-color" content="#0C0A09">
+<meta property="og:title" content="Charis Tribe Global Church — Good News Always">
+<meta property="og:description" content="Raising a community of world changers globally.">
+<meta property="og:image" content="assets/stage-worship.jpg">
+<meta property="og:type" content="website">
+<link rel="icon" type="image/png" href="assets/favicon-64.png">
+<link rel="apple-touch-icon" href="assets/favicon.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- Fonts load without blocking the first paint; the intro curtain waits for them. -->
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap">
+<link id="font-css" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap"></noscript>
+<link rel="preload" as="image" href="assets/hero-poster.jpg">
+
+<script>
+  /* Runs before first paint: enables motion styles + skips the intro on repeat visits this session. */
+  document.documentElement.classList.add('js');
+  try { if (sessionStorage.getItem('ct-intro')) document.documentElement.classList.add('intro-seen'); } catch (e) {}
+</script>
+
+<style>
+/* ==========================================================================
+   1. TOKENS — change the whole look from here
+   ========================================================================== */
+:root {
+  /* Brand palette (kept from the live site, refined) */
+  --flame: #FF4500;          /* Charis flame — primary accent (from live site) */
+  --flame-hot: #FF7A3D;      /* lighter flame for glows/gradients */
+  --flame-deep: #D63B00;     /* hover / pressed (from live site) */
+  --flame-ink: #C23400;      /* flame for SMALL text on light backgrounds (AA contrast) */
+
+  --ink: #0C0A09;            /* warm near-black (live site: #0b0b0b) */
+  --ink-2: #14110F;
+  --ink-3: #1F1A16;
+  --bone: #F5EFE6;           /* warm cream (live site: #faf8f3) */
+  --bone-2: #ECE3D6;
+  --paper: #FBF8F3;
+
+  --muted-d: rgba(245, 239, 230, .64);
+  --faint-d: rgba(245, 239, 230, .40);
+  --line-d:  rgba(245, 239, 230, .14);
+  --muted-l: #675E55;
+  --faint-l: rgba(12, 10, 9, .48);
+  --line-l:  rgba(12, 10, 9, .14);
+
+  /* Type */
+  --serif: "Instrument Serif", "Iowan Old Style", "Times New Roman", serif;
+  --sans:  "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --mono:  "Geist Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  /* Layout */
+  --maxw: 1440px;
+  --gutter: clamp(16px, 4.2vw, 64px);
+  --radius: 24px;
+  --radius-sm: 14px;
+  --header-h: 84px;
+
+  /* Motion */
+  --ease: cubic-bezier(.22, 1, .36, 1);
+  --ease-io: cubic-bezier(.76, 0, .24, 1);
+}
+
+/* ==========================================================================
+   2. BASE
+   ========================================================================== */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; scroll-padding-top: 90px; }
+body {
+  margin: 0;
+  background: var(--ink);
+  color: var(--bone);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  overflow-x: clip;
+}
+img, video, svg { display: block; max-width: 100%; }
+img { height: auto; }
+a { color: inherit; text-decoration: none; }
+button, input { font: inherit; color: inherit; }
+button { background: none; border: 0; padding: 0; cursor: pointer; }
+h1, h2, h3, h4, p, blockquote, figure, ul, ol { margin: 0; }
+ul, ol { padding: 0; list-style: none; }
+::selection { background: var(--flame); color: var(--ink); }
+:focus-visible { outline: 2px solid var(--flame); outline-offset: 3px; border-radius: 8px; }
+
+.sr-only { position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+.skip-link { position: fixed; left: 16px; top: -60px; z-index: 1000; background: var(--flame); color: var(--ink); padding: 12px 18px; border-radius: 999px; font-weight: 600; transition: top .3s; }
+.skip-link:focus { top: 16px; }
+
+.i { width: 1em; height: 1em; flex: none; }
+
+/* Film grain — subtle texture over everything */
+body::after {
+  content: ""; position: fixed; inset: 0; z-index: 9990; pointer-events: none; opacity: .055;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ==========================================================================
+   3. LAYOUT + THEMES
+   ========================================================================== */
+.wrap { width: 100%; max-width: var(--maxw); margin-inline: auto; padding-inline: var(--gutter); }
+.section { position: relative; padding-block: clamp(96px, 12vw, 176px); }
+
+/* Each section picks a theme; components read these local variables. */
+.t-ink   { --bg: var(--ink);   --fg: var(--bone); --muted: var(--muted-d); --faint: var(--faint-d); --line: var(--line-d); --accent: var(--flame); --accent-text: var(--flame); background: var(--bg); color: var(--fg); }
+.t-ink2  { --bg: var(--ink-2); --fg: var(--bone); --muted: var(--muted-d); --faint: var(--faint-d); --line: var(--line-d); --accent: var(--flame); --accent-text: var(--flame); background: var(--bg); color: var(--fg); }
+.t-bone  { --bg: var(--bone);  --fg: var(--ink);  --muted: var(--muted-l); --faint: var(--faint-l); --line: var(--line-l); --accent: var(--flame); --accent-text: var(--flame-ink); background: var(--bg); color: var(--fg); }
+.t-flame { --bg: var(--flame); --fg: var(--ink);  --muted: rgba(12,10,9,.74); --faint: rgba(12,10,9,.55); --line: rgba(12,10,9,.22); --accent: var(--ink); --accent-text: var(--ink); background: var(--bg); color: var(--fg); }
+
+/* ==========================================================================
+   4. TYPOGRAPHY
+   ========================================================================== */
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 14px;
+  font: 500 12px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--muted);
+}
+.eyebrow b { font-weight: 500; color: var(--accent-text); }
+.eyebrow .rule { width: 40px; height: 1px; background: currentColor; opacity: .45; }
+
+.display { font-family: var(--serif); font-weight: 400; line-height: .94; letter-spacing: -.022em; text-wrap: balance; }
+.display em { font-style: italic; color: var(--accent); padding-right: .05em; }
+.t-flame .display em { color: var(--bone); }
+.h-xl { font-size: clamp(3.1rem, min(7.8vw, 13.2vh), 9rem); }
+.h-lg { font-size: clamp(2.7rem, 6.1vw, 6.3rem); }
+.h-md { font-size: clamp(2.1rem, 4vw, 3.9rem); line-height: 1; }
+.lede { font-size: clamp(1.02rem, 1.2vw, 1.16rem); line-height: 1.7; color: var(--muted); max-width: 50ch; }
+.copy { color: var(--muted); line-height: 1.75; }
+.copy + .copy { margin-top: 1em; }
+
+/* ==========================================================================
+   5. BUTTONS + LINKS
+   ========================================================================== */
+.btn {
+  --btn-bg: var(--flame); --btn-fg: var(--ink); --btn-icon-bg: var(--ink); --btn-icon-fg: var(--flame);
+  position: relative; display: inline-flex; align-items: center; gap: 14px;
+  height: 56px; padding: 0 8px 0 26px; border-radius: 999px;
+  background: var(--btn-bg); color: var(--btn-fg);
+  font: 600 15px/1 var(--sans); letter-spacing: -.005em; white-space: nowrap;
+  transition: background-color .45s var(--ease), color .45s var(--ease), border-color .45s var(--ease), translate .5s var(--ease), box-shadow .45s var(--ease);
+  isolation: isolate;
+}
+.btn__label { display: block; height: 1.25em; line-height: 1.25em; overflow: hidden; }
+.btn__label span { display: block; text-shadow: 0 1.25em 0 currentColor; transition: transform .55s var(--ease); }
+.btn:hover .btn__label span, .btn:focus-visible .btn__label span { transform: translateY(-1.25em); }
+.btn__icon {
+  width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center;
+  background: var(--btn-icon-bg); color: var(--btn-icon-fg); font-size: 18px;
+  transition: rotate .55s var(--ease), background-color .45s, color .45s;
+}
+.btn:hover .btn__icon { rotate: 45deg; }
+.btn--flame:hover { --btn-bg: var(--flame-hot); box-shadow: 0 18px 40px -14px rgba(255, 69, 0, .7); }
+.btn--glass { --btn-bg: rgba(245,239,230,.08); --btn-fg: var(--bone); --btn-icon-bg: var(--bone); --btn-icon-fg: var(--ink); border: 1px solid rgba(245,239,230,.22); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
+.btn--glass:hover { --btn-bg: rgba(245,239,230,.16); border-color: rgba(245,239,230,.4); }
+.btn--ink { --btn-bg: var(--ink); --btn-fg: var(--bone); --btn-icon-bg: var(--flame); --btn-icon-fg: var(--ink); }
+.btn--ink:hover { --btn-bg: var(--ink-3); }
+.btn--line { --btn-bg: transparent; --btn-fg: var(--fg); --btn-icon-bg: var(--fg); --btn-icon-fg: var(--bg); border: 1px solid var(--line); }
+.btn--line:hover { border-color: var(--fg); }
+.btn--bone { --btn-bg: var(--bone); --btn-fg: var(--ink); --btn-icon-bg: var(--ink); --btn-icon-fg: var(--bone); }
+.btn-row { display: flex; flex-wrap: wrap; gap: 12px; }
+
+.link-arrow {
+  display: inline-flex; align-items: center; gap: 10px; font-weight: 600; font-size: 15px; white-space: nowrap;
+  background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat;
+  padding-bottom: 3px; transition: background-size .5s var(--ease), color .3s;
+}
+.link-arrow:hover { background-size: 100% 1px; }
+.link-arrow .i { transition: translate .4s var(--ease), rotate .4s var(--ease); }
+.link-arrow:hover .i { translate: 3px -3px; }
+
+[data-magnetic] { transition: translate .6s var(--ease); }
+
+/* ==========================================================================
+   6. INTRO (first visit per session)
+   ========================================================================== */
+.intro { display: none; }
+.js .intro {
+  position: fixed; inset: 0; z-index: 9999; display: grid; place-items: center;
+  background: var(--ink); color: var(--bone);
+  transition: transform 1.05s var(--ease-io);
+  animation: intro-failsafe 0s linear 4.5s forwards;
+}
+.js.intro-seen .intro, .intro.is-done { display: none; }
+.intro.is-leaving { transform: translateY(-100%); }
+.intro__inner { display: grid; justify-items: center; gap: 22px; transition: opacity .5s, transform .8s var(--ease); }
+.intro.is-leaving .intro__inner { opacity: 0; transform: translateY(-40px); }
+.intro__mark { width: 86px; height: 86px; animation: intro-pop 1.1s var(--ease) both; }
+.intro__script { width: 210px; opacity: 0; animation: intro-fade 1s var(--ease) .35s both; }
+.intro__bar { position: absolute; left: var(--gutter); right: var(--gutter); bottom: 40px; display: flex; justify-content: space-between; align-items: center; gap: 24px; font: 500 11px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase; color: var(--faint-d); }
+.intro__line { flex: 1; height: 1px; background: var(--line-d); position: relative; overflow: hidden; }
+.intro__line::after { content: ""; position: absolute; inset: 0; background: var(--flame); transform-origin: left; animation: intro-line 1.25s var(--ease-io) both; }
+@keyframes intro-pop { from { opacity: 0; transform: scale(.6) rotate(-30deg); } to { opacity: 1; transform: none; } }
+@keyframes intro-fade { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+@keyframes intro-line { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes intro-failsafe { to { visibility: hidden; opacity: 0; pointer-events: none; } }
+
+/* ==========================================================================
+   7. HEADER + MENU
+   ========================================================================== */
+.site-header {
+  position: fixed; inset: 0 0 auto; z-index: 100; color: var(--bone);
+  border-bottom: 1px solid transparent;
+  transition: transform .7s var(--ease), background-color .5s, border-color .5s, backdrop-filter .5s;
+}
+.site-header.is-scrolled {
+  background: rgba(12, 10, 9, .66);
+  backdrop-filter: blur(18px) saturate(150%); -webkit-backdrop-filter: blur(18px) saturate(150%);
+  border-bottom-color: rgba(245, 239, 230, .08);
+}
+.site-header.is-hidden { transform: translateY(-101%); }
+.progress { position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: var(--flame); transform-origin: left; transform: scaleX(0); opacity: 0; transition: opacity .4s; }
+.site-header.is-scrolled .progress { opacity: 1; }
+
+.nav { height: var(--header-h); display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+.brand { display: flex; align-items: center; gap: 12px; flex: none; }
+.brand img { width: 46px; height: 46px; transition: rotate 1s var(--ease); }
+.brand:hover img { rotate: -25deg; }
+.brand__name { font: 600 15px/1.15 var(--sans); letter-spacing: -.01em; }
+.brand__name small { display: block; font: 500 10px/1.5 var(--mono); letter-spacing: .18em; text-transform: uppercase; color: var(--faint-d); }
+
+.nav__links { display: none; align-items: center; gap: 2px; }
+.nav__links a { position: relative; padding: 10px 14px; border-radius: 999px; font-size: 14.5px; font-weight: 500; color: rgba(245,239,230,.76); transition: color .3s, background-color .3s; }
+.nav__links a:hover { color: var(--bone); background: rgba(245,239,230,.08); }
+
+.nav__right { display: flex; align-items: center; gap: 10px; }
+.live-pill {
+  display: none; align-items: center; gap: 9px; height: 42px; padding: 0 16px; border-radius: 999px;
+  border: 1px solid rgba(245,239,230,.18); font: 500 12px/1 var(--mono); letter-spacing: .04em; color: rgba(245,239,230,.84);
+  transition: border-color .3s, background-color .3s;
+}
+.live-pill:hover { border-color: rgba(245,239,230,.4); }
+.live-pill.is-live { background: rgba(255,69,0,.14); border-color: rgba(255,69,0,.6); color: var(--bone); }
+.dot { width: 7px; height: 7px; border-radius: 50%; background: var(--faint-d); flex: none; }
+.is-live .dot, .dot--live { background: var(--flame); animation: pulse 1.8s infinite; }
+@keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(255,69,0,.65); } 70% { box-shadow: 0 0 0 9px rgba(255,69,0,0); } 100% { box-shadow: 0 0 0 0 rgba(255,69,0,0); } }
+.nav__cta { display: none; height: 46px; padding-left: 20px; }
+.nav__cta .btn__icon { width: 32px; height: 32px; font-size: 15px; }
+
+.menu-btn {
+  display: inline-flex; align-items: center; gap: 12px; height: 46px; padding: 0 18px 0 20px; border-radius: 999px;
+  background: var(--bone); color: var(--ink); font-weight: 600; font-size: 14px;
+}
+.menu-btn__lines { width: 18px; height: 10px; position: relative; }
+.menu-btn__lines::before, .menu-btn__lines::after { content: ""; position: absolute; left: 0; right: 0; height: 1.6px; background: currentColor; border-radius: 2px; transition: transform .5s var(--ease), top .5s var(--ease); }
+.menu-btn__lines::before { top: 0; }
+.menu-btn__lines::after { top: 8.4px; }
+.menu-open .menu-btn__lines::before { top: 4.2px; transform: rotate(45deg); }
+.menu-open .menu-btn__lines::after { top: 4.2px; transform: rotate(-45deg); }
+.menu-btn [data-when="open"] { display: none; }
+.menu-open .menu-btn [data-when="open"] { display: inline; }
+.menu-open .menu-btn [data-when="closed"] { display: none; }
+
+.menu {
+  position: fixed; inset: 0; z-index: 99; background: var(--ink); color: var(--bone);
+  display: flex; flex-direction: column; justify-content: space-between; gap: 32px;
+  padding: calc(var(--header-h) + 24px) var(--gutter) 32px; overflow-y: auto;
+  clip-path: inset(0 0 100% 0); visibility: hidden;
+  transition: clip-path .85s var(--ease-io), visibility 0s linear .85s;
+}
+.menu-open .menu { clip-path: inset(0 0 0 0); visibility: visible; transition: clip-path .85s var(--ease-io), visibility 0s; }
+.menu-open { overflow: hidden; }
+.menu-open .site-header { background: transparent; border-color: transparent; backdrop-filter: none; -webkit-backdrop-filter: none; transform: none; }
+.menu__links li { overflow: hidden; border-bottom: 1px solid var(--line-d); }
+.menu__links a { display: flex; align-items: baseline; gap: 16px; padding: 10px 0 8px; font-family: var(--serif); font-size: clamp(2.6rem, 10vw, 4.4rem); line-height: 1.04; letter-spacing: -.02em; transform: translateY(105%); transition: transform .9s var(--ease), color .3s; }
+.menu__links a small { font: 500 12px/1 var(--mono); letter-spacing: .1em; color: var(--flame); translate: 0 -.9em; }
+.menu__links a:hover { color: var(--flame); font-style: italic; }
+.menu-open .menu__links a { transform: none; }
+.menu-open .menu__links li:nth-child(1) a { transition-delay: .25s; }
+.menu-open .menu__links li:nth-child(2) a { transition-delay: .3s; }
+.menu-open .menu__links li:nth-child(3) a { transition-delay: .35s; }
+.menu-open .menu__links li:nth-child(4) a { transition-delay: .4s; }
+.menu-open .menu__links li:nth-child(5) a { transition-delay: .45s; }
+.menu-open .menu__links li:nth-child(6) a { transition-delay: .5s; }
+.menu-open .menu__links li:nth-child(7) a { transition-delay: .55s; }
+.menu__foot { display: grid; gap: 22px; color: var(--muted-d); font-size: 14px; }
+.menu__foot .btn { justify-self: start; }
+
+@media (min-width: 560px) { .live-pill { display: inline-flex; } }
+@media (min-width: 760px) { .nav__cta { display: inline-flex; } }
+@media (min-width: 1180px) {
+  .nav__links { display: flex; }
+  .menu-btn, .menu { display: none; }
+}
+
+/* ==========================================================================
+   8. HERO
+   ========================================================================== */
+.hero { position: relative; min-height: 100svh; display: flex; flex-direction: column; justify-content: flex-end; overflow: hidden; isolation: isolate; background: var(--ink); color: var(--bone); }
+.hero__media { position: absolute; inset: 0; z-index: -2; }
+.hero__media video, .hero__media img { width: 100%; height: 100%; object-fit: cover; transform: scale(1.12); transition: transform 2.8s var(--ease); }
+.hero.is-in .hero__media video, .hero.is-in .hero__media img { transform: scale(1.0); }
+.hero__shade {
+  position: absolute; inset: 0; z-index: -1;
+  background:
+    linear-gradient(180deg, rgba(12,10,9,.62) 0%, rgba(12,10,9,.18) 26%, rgba(12,10,9,.30) 52%, rgba(12,10,9,.90) 86%, var(--ink) 100%),
+    radial-gradient(110% 70% at 0% 100%, rgba(255,69,0,.32), transparent 60%),
+    radial-gradient(60% 50% at 100% 0%, rgba(255,69,0,.12), transparent 70%);
+}
+.hero__content { padding-top: calc(var(--header-h) + 48px); padding-bottom: 0; }
+.hero__kicker {
+  display: inline-flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  padding: 6px 16px 6px 6px; margin-bottom: clamp(22px, 3vw, 34px); border-radius: 999px;
+  background: rgba(245,239,230,.07); border: 1px solid rgba(245,239,230,.14);
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  font: 500 11.5px/1.3 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: rgba(245,239,230,.84);
+}
+.hero__kicker .tag { background: var(--flame); color: var(--ink); padding: 7px 12px; border-radius: 999px; }
+.kicker-long { display: none; }
+@media (min-width: 620px) { .kicker-long { display: inline; } .kicker-short { display: none; } }
+@media (max-width: 379px) {
+  .brand__name { display: none; }
+  .menu-btn { padding: 0 14px 0 16px; }
+}
+.hero h1 { max-width: 16ch; }
+.br-lg { display: none; }
+.nowrap { white-space: nowrap; }
+@media (min-width: 760px) { .hero h1 { max-width: none; } .br-lg { display: inline; } }
+.hero__row { display: grid; gap: 28px; margin-top: clamp(26px, 3.2vw, 40px); align-items: end; }
+.hero__lede { max-width: 46ch; color: rgba(245,239,230,.74); font-size: clamp(1rem, 1.15vw, 1.12rem); line-height: 1.7; }
+
+.hero__bar { margin-top: clamp(40px, min(5vw, 7vh), 72px); border-top: 1px solid rgba(245,239,230,.16); display: grid; grid-template-columns: 1fr 1fr; }
+.hero__stat { padding: 20px 20px 26px 0; display: grid; gap: 8px; align-content: start; font-size: 14.5px; line-height: 1.5; color: rgba(245,239,230,.9); }
+.hero__stat + .hero__stat { padding-left: 20px; border-left: 1px solid rgba(245,239,230,.12); }
+.hero__stat--next { grid-column: 1 / -1; border-bottom: 1px solid rgba(245,239,230,.12); }
+.hero__stat--next + .hero__stat { padding-left: 0; border-left: 0; }
+.stat__label { display: flex; align-items: center; gap: 10px; font: 500 11px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--faint-d); }
+.stat__sub { color: var(--faint-d); font-size: 13px; }
+.countdown { display: flex; align-items: baseline; gap: 4px; font: 400 clamp(1.6rem, 2.2vw, 2.1rem)/1 var(--mono); font-variant-numeric: tabular-nums; letter-spacing: -.02em; color: var(--bone); }
+.countdown i { font-style: normal; font-size: .45em; color: var(--faint-d); margin-right: 10px; letter-spacing: .06em; }
+.hero__stat a { text-decoration: underline; text-decoration-color: rgba(245,239,230,.3); text-underline-offset: 4px; transition: text-decoration-color .3s; }
+.hero__stat a:hover { text-decoration-color: var(--flame); }
+.hero__tools { display: none; }
+
+.video-toggle { display: inline-flex; align-items: center; gap: 10px; font: 500 11px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: rgba(245,239,230,.72); }
+.video-toggle__icon { width: 42px; height: 42px; border-radius: 50%; border: 1px solid rgba(245,239,230,.25); display: grid; place-items: center; font-size: 14px; transition: background-color .3s, color .3s, border-color .3s; }
+.video-toggle:hover .video-toggle__icon { background: var(--bone); color: var(--ink); border-color: var(--bone); }
+.video-toggle .i-play { display: none; }
+.video-toggle[aria-pressed="true"] .i-play { display: block; }
+.video-toggle[aria-pressed="true"] .i-pause { display: none; }
+.hero__stat--next { position: relative; }
+.hero__video-toggle-mobile { position: absolute; right: 0; top: 22px; }
+.hero__video-toggle-mobile .video-toggle__label { display: none; }
+
+.badge { position: absolute; right: var(--gutter); top: calc(var(--header-h) + 8vh); width: 158px; height: 158px; display: none; }
+.badge svg { width: 100%; height: 100%; animation: spin 26s linear infinite; }
+.badge text { font: 500 10.6px var(--mono); letter-spacing: .25em; fill: rgba(245,239,230,.82); text-transform: uppercase; }
+.badge img { position: absolute; inset: 50% auto auto 50%; width: 62px; height: 62px; translate: -50% -50%; }
+@keyframes spin { to { rotate: 360deg; } }
+
+.scroll-cue { display: inline-flex; align-items: center; gap: 12px; font: 500 11px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: rgba(245,239,230,.6); }
+.scroll-cue__line { width: 1px; height: 38px; background: rgba(245,239,230,.2); position: relative; overflow: hidden; }
+.scroll-cue__line::after { content: ""; position: absolute; left: 0; right: 0; top: -40%; height: 40%; background: var(--flame); animation: drip 2.2s var(--ease-io) infinite; }
+@keyframes drip { to { top: 100%; } }
+
+/* Hero entrance (triggered after the intro) */
+.js .hero [data-hero] { opacity: 0; transform: translateY(22px); animation: hero-failsafe 0s linear 5s forwards; }
+.hero.is-in [data-hero] { opacity: 1; transform: none; transition: opacity 1s var(--ease) var(--d, 0s), transform 1.2s var(--ease) var(--d, 0s); }
+@keyframes hero-failsafe { to { opacity: 1; transform: none; } }
+
+/* Word-by-word rise used for headings (JS wraps words) */
+.w { display: inline-block; overflow: hidden; vertical-align: top; padding: 0 .07em .1em 0; margin: 0 -.07em -.1em 0; }
+.w__i { display: inline-block; transform: translateY(108%); transition: transform 1.15s var(--ease); transition-delay: calc(var(--i, 0) * 55ms + var(--base, 0ms)); }
+.is-in .w__i, .is-in.w__i { transform: none; }
+.hero h1 { --base: 120ms; }
+
+@media (min-width: 760px) {
+  .hero__row { grid-template-columns: minmax(0, 1fr) auto; }
+  .hero__bar { grid-template-columns: 1.35fr 1fr 1.15fr auto; }
+  .hero__stat--next { grid-column: auto; border-bottom: 0; }
+  .hero__stat--next + .hero__stat { padding-left: 24px; border-left: 1px solid rgba(245,239,230,.12); }
+  .hero__stat + .hero__stat { padding-left: 24px; }
+  .hero__tools { display: flex; align-items: center; gap: 22px; padding-left: 24px; border-left: 1px solid rgba(245,239,230,.12); }
+  .hero__video-toggle-mobile { display: none; }
+}
+@media (min-width: 760px) and (max-width: 1099px) {
+  .hero__bar { grid-template-columns: 1.2fr 1.2fr auto; }
+  .hero__stat--times { display: none; }
+}
+@media (min-width: 1000px) { .badge { display: block; } }
+
+/* ==========================================================================
+   9. MARQUEE
+   ========================================================================== */
+.marquee { overflow: hidden; padding: 22px 0 24px; border-block: 1px solid rgba(12,10,9,.12); }
+.marquee__track { display: flex; width: max-content; animation: marquee 42s linear infinite; }
+.marquee:hover .marquee__track { animation-play-state: paused; }
+.marquee__group { display: flex; align-items: center; flex: none; gap: clamp(22px, 3vw, 46px); padding-right: clamp(22px, 3vw, 46px); }
+.marquee__item { font-family: var(--serif); font-size: clamp(1.9rem, 3.6vw, 3.4rem); line-height: 1.05; letter-spacing: -.01em; white-space: nowrap; }
+.marquee__item--i { font-style: italic; }
+.marquee .i { width: .9em; height: .9em; font-size: clamp(1.3rem, 2.2vw, 2rem); animation: spin 9s linear infinite; }
+@keyframes marquee { to { transform: translateX(-50%); } }
+
+/* ==========================================================================
+   10. SECTION HEAD (shared)
+   ========================================================================== */
+.sec-head { display: grid; gap: 28px; margin-bottom: clamp(48px, 7vw, 96px); }
+.sec-head__top { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px 20px; padding-bottom: 22px; border-bottom: 1px solid var(--line); }
+.sec-head > * { min-width: 0; }
+@media (max-width: 639px) { .eyebrow .rule { width: 22px; } .eyebrow { gap: 10px; } }
+.sec-head__aside { display: grid; gap: 22px; align-content: end; justify-items: start; }
+.sec-head__body { display: grid; gap: 26px; }
+@media (max-width: 639px) { .hide-sm { display: none; } }
+/* Grid children may shrink below their content's intrinsic width (prevents mobile overflow). */
+.evolve > *, .give > *, .pastors > *, .testi > *, .welcome__grid > *, .welcome__intro > *, .footer__news > *, .footer__grid > *, .sec-head__body > * { min-width: 0; }
+@media (min-width: 1000px) {
+  .sec-head__body { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, .65fr); gap: 64px; align-items: end; }
+}
+
+/* ==========================================================================
+   11. WELCOME
+   ========================================================================== */
+.welcome__intro { display: grid; gap: 40px; }
+.define { max-width: 300px; padding-top: 10px; border-top: 2px solid var(--ink); }
+.define__word { font: italic 400 2.3rem/1 var(--serif); margin-top: 14px; }
+.define__pron { margin-top: 10px; font: 500 11px/1.4 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--accent-text); }
+.define__text { margin-top: 14px; font-size: 14.5px; line-height: 1.6; color: var(--muted); }
+@media (min-width: 1000px) {
+  .welcome__intro { grid-template-columns: 250px minmax(0, 1fr); gap: clamp(48px, 6vw, 110px); align-items: start; }
+  .define { position: sticky; top: 120px; }
+}
+.statement { font-family: var(--serif); font-size: clamp(2.05rem, 4.4vw, 4.6rem); line-height: 1.07; letter-spacing: -.02em; max-width: 29ch; }
+.statement em { font-style: italic; color: var(--flame); }
+.sw { transition: opacity .5s ease; }
+.ready .statement .sw { opacity: .17; }
+.ready .statement .sw.on { opacity: 1; }
+.chip-img { display: inline-block; width: 1.85em; height: .9em; border-radius: 999px; overflow: hidden; vertical-align: -.06em; margin: 0 .06em; background: var(--bone-2); }
+.chip-img img { width: 100%; height: 100%; object-fit: cover; }
+.chip-glyph { display: inline-grid; place-items: center; width: 1.05em; height: .9em; vertical-align: -.06em; color: var(--flame); }
+.chip-glyph .i { width: .62em; height: .62em; }
+
+.welcome__grid { display: grid; gap: clamp(56px, 7vw, 110px); margin-top: clamp(72px, 10vw, 150px); }
+.collage { position: relative; aspect-ratio: 5 / 5.6; max-width: 640px; }
+.collage__a, .collage__b { position: absolute; overflow: hidden; border-radius: var(--radius); background: var(--bone-2); }
+.collage__a { left: 0; top: 0; width: 74%; height: 80%; }
+.collage__b { right: 0; bottom: 0; width: 50%; height: 50%; outline: 10px solid var(--bone); }
+.collage img { width: 100%; height: 118%; object-fit: cover; }
+.collage__card {
+  position: absolute; left: 5%; bottom: 3%; z-index: 2; width: min(250px, 46%);
+  background: var(--ink); color: var(--bone); border-radius: 18px; padding: 18px 20px 20px;
+  box-shadow: 0 30px 60px -25px rgba(12,10,9,.55);
+}
+.collage__card .stat__label { margin-bottom: 12px; }
+.collage__card strong { display: block; font: 400 clamp(2.2rem, 3.4vw, 3rem)/.95 var(--serif); letter-spacing: -.02em; }
+.collage__card strong em { color: var(--flame); }
+.collage__card p { margin-top: 10px; font-size: 13px; color: var(--muted-d); line-height: 1.5; }
+
+.welcome__copy .copy { max-width: 54ch; font-size: 1.06rem; }
+.welcome__copy .btn-row { margin-top: 36px; }
+.steps { margin-top: clamp(48px, 6vw, 72px); border-top: 1px solid var(--line); }
+.steps__title { margin: 0 0 4px; padding-top: 22px; }
+.step { position: relative; isolation: isolate; display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; gap: 16px; align-items: center; padding: 22px 4px; border-bottom: 1px solid var(--line); transition: padding .6s var(--ease), color .45s; }
+.step::before { content: ""; position: absolute; inset: 0; z-index: -1; border-radius: 16px; background: var(--ink); transform: scaleY(.0); transform-origin: 50% 100%; opacity: 0; transition: transform .6s var(--ease), opacity .3s; }
+.step:hover, .step:focus-visible { color: var(--bone); padding-inline: 20px; }
+.step:hover::before, .step:focus-visible::before { transform: none; opacity: 1; }
+.step__num { font: 500 12px/1 var(--mono); color: var(--faint); transition: color .4s; }
+.step:hover .step__num { color: var(--flame); }
+.step__title { font: 400 clamp(1.5rem, 2.1vw, 1.9rem)/1.1 var(--serif); letter-spacing: -.01em; }
+.step__desc { margin-top: 4px; font-size: 14px; color: var(--muted); transition: color .4s; }
+.step:hover .step__desc { color: var(--muted-d); }
+.step__arrow { width: 46px; height: 46px; border-radius: 50%; border: 1px solid var(--line); display: grid; place-items: center; font-size: 18px; transition: background-color .4s, color .4s, border-color .4s, rotate .6s var(--ease); }
+.step:hover .step__arrow { background: var(--flame); color: var(--ink); border-color: var(--flame); rotate: 45deg; }
+@media (min-width: 1000px) {
+  .welcome__grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: start; }
+  .welcome__copy { padding-top: 40px; }
+}
+
+/* ==========================================================================
+   12. CAMPUSES
+   ========================================================================== */
+.campus-list { border-top: 1px solid var(--line); }
+.campus a {
+  position: relative; display: grid; grid-template-columns: 40px minmax(0, 1fr) auto; gap: 14px; align-items: center;
+  padding: clamp(18px, 2.3vw, 30px) 0; border-bottom: 1px solid var(--line);
+}
+.campus a::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 1px; background: var(--flame); transform: scaleX(0); transform-origin: left; transition: transform .8s var(--ease); }
+.campus a:hover::after, .campus a:focus-visible::after { transform: scaleX(1); }
+.campus__num { font: 500 12px/1 var(--mono); color: var(--faint); align-self: start; padding-top: .9em; }
+.campus__city { display: block; font: 400 clamp(2.5rem, 6.6vw, 6.6rem)/.95 var(--serif); letter-spacing: -.025em; transition: transform .7s var(--ease), color .4s; }
+.campus a:hover .campus__city { transform: translateX(clamp(8px, 1.8vw, 26px)); color: var(--flame); font-style: italic; }
+.campus__detail { display: block; margin-top: 8px; font: 500 11.5px/1.4 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.campus__meta { display: none; font-size: 14px; color: var(--muted); line-height: 1.55; }
+.campus__meta strong { display: block; color: var(--fg); font-weight: 500; }
+.campus__end { display: flex; align-items: center; gap: 14px; }
+.campus__thumb { width: 64px; height: 64px; border-radius: 14px; overflow: hidden; flex: none; background: var(--ink-3); }
+.campus__thumb img { width: 100%; height: 100%; object-fit: cover; }
+.campus__arrow { width: clamp(46px, 4.4vw, 62px); height: clamp(46px, 4.4vw, 62px); border-radius: 50%; border: 1px solid var(--line); display: none; place-items: center; font-size: 20px; transition: background-color .4s, color .4s, border-color .4s, rotate .6s var(--ease); }
+.campus a:hover .campus__arrow { background: var(--flame); color: var(--ink); border-color: var(--flame); rotate: 45deg; }
+.campus-foot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 24px; align-items: center; margin-top: 40px; color: var(--muted); font-size: 15px; }
+
+.cursor-preview { position: fixed; left: 0; top: 0; z-index: 60; width: 280px; height: 350px; border-radius: 20px; overflow: hidden; pointer-events: none; opacity: 0; scale: .55; transition: opacity .35s ease, scale .6s var(--ease); background: var(--ink-3); box-shadow: 0 40px 80px -30px rgba(0,0,0,.8); }
+.cursor-preview.is-visible { opacity: 1; scale: 1; }
+.cursor-preview img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; scale: 1.18; transition: opacity .45s ease, scale .9s var(--ease); }
+.cursor-preview img.is-active { opacity: 1; scale: 1; }
+
+@media (min-width: 900px) {
+  .campus a { grid-template-columns: 80px minmax(0, 1fr) minmax(200px, 270px) auto; gap: 24px; }
+  .campus__meta { display: block; }
+  .campus__arrow { display: grid; }
+}
+@media (hover: hover) and (pointer: fine) and (min-width: 900px) { .campus__thumb { display: none; } }
+
+/* ==========================================================================
+   13. LEAD PASTORS
+   ========================================================================== */
+.pastors { display: grid; gap: clamp(48px, 6vw, 104px); align-items: center; }
+.stage { position: relative; isolation: isolate; aspect-ratio: 4 / 4.9; border-radius: 30px; overflow: hidden; background: var(--ink); max-width: 640px; width: 100%; }
+.stage__sun { position: absolute; z-index: -2; left: 14%; top: 9%; width: 72%; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle at 32% 28%, var(--flame-hot) 0%, var(--flame) 45%, #B83000 100%); box-shadow: 0 0 120px 10px rgba(255,69,0,.35); }
+.stage__ring { position: absolute; z-index: -1; left: -8%; top: 2%; width: 74%; aspect-ratio: 1; border-radius: 50%; border: 1.5px solid rgba(245,239,230,.32); }
+.stage__ring--2 { left: auto; right: -30%; top: 30%; width: 62%; border-color: rgba(245,239,230,.12); }
+.stage__cutout { position: absolute; z-index: 1; left: 7%; bottom: 0; width: 86%; }
+.stage__cutout img { width: 100%; filter: drop-shadow(0 30px 40px rgba(0,0,0,.45)); }
+.stage__fade { position: absolute; z-index: 2; inset: auto 0 0; height: 34%; background: linear-gradient(180deg, transparent, rgba(12,10,9,.86) 62%, var(--ink)); }
+.stage__caption { position: absolute; z-index: 3; left: clamp(18px, 3vw, 30px); bottom: clamp(18px, 3vw, 28px); color: var(--bone); }
+.stage__caption strong { display: block; font: 400 clamp(1.6rem, 2.6vw, 2.3rem)/1 var(--serif); letter-spacing: -.01em; }
+.stage__caption span { display: block; margin-top: 8px; font: 500 11px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--muted-d); }
+.stage__inset { position: absolute; z-index: 3; right: clamp(14px, 3vw, 26px); top: clamp(14px, 3vw, 26px); width: 31%; rotate: 5deg; border-radius: 14px; overflow: hidden; outline: 5px solid var(--bone); box-shadow: 0 20px 40px -12px rgba(0,0,0,.6); transition: rotate .8s var(--ease), scale .8s var(--ease); }
+.stage:hover .stage__inset { rotate: 0deg; scale: 1.04; }
+.stage__inset img { aspect-ratio: 1; object-fit: cover; width: 100%; }
+.stage__inset figcaption { position: absolute; inset: auto 0 0; padding: 18px 10px 8px; font: 500 9.5px/1.2 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--bone); background: linear-gradient(transparent, rgba(12,10,9,.8)); }
+
+.pastors__copy h2 { margin: 26px 0 18px; }
+.roles { font: 500 12px/1.6 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--accent-text); }
+.pull { position: relative; margin: clamp(30px, 4vw, 44px) 0; padding-left: clamp(22px, 2.4vw, 34px); border-left: 2px solid var(--flame); }
+.pull p { font: italic 400 clamp(1.5rem, 2.3vw, 2.15rem)/1.22 var(--serif); letter-spacing: -.01em; }
+.more { margin-top: 18px; }
+.more summary { list-style: none; display: inline-flex; align-items: center; gap: 12px; cursor: pointer; font-weight: 600; font-size: 15px; padding: 6px 0; }
+.more summary::-webkit-details-marker { display: none; }
+.more__icon { width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--line); display: grid; place-items: center; font-size: 16px; transition: rotate .5s var(--ease), background-color .3s, color .3s; }
+.more summary:hover .more__icon { background: var(--ink); color: var(--bone); }
+.more[open] .more__icon { rotate: 45deg; }
+.more [data-when="open"] { display: none; }
+.more[open] [data-when="open"] { display: inline; }
+.more[open] [data-when="closed"] { display: none; }
+.more__body { padding-top: 14px; }
+@supports (interpolate-size: allow-keywords) {
+  .more { interpolate-size: allow-keywords; }
+  .more::details-content { block-size: 0; overflow: clip; transition: block-size .7s var(--ease), content-visibility .7s allow-discrete; }
+  .more[open]::details-content { block-size: auto; }
+}
+.platforms { margin-top: 34px; padding-top: 26px; border-top: 1px solid var(--line); }
+.platforms ul { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+.platforms li { padding: 9px 15px; border-radius: 999px; border: 1px solid var(--line); font-size: 13.5px; font-weight: 500; transition: background-color .3s, color .3s, border-color .3s; }
+.platforms li:hover { background: var(--ink); color: var(--bone); border-color: var(--ink); }
+.pastors__copy .btn { margin-top: 36px; }
+@media (min-width: 1000px) {
+  .pastors { grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr); }
+}
+
+/* ==========================================================================
+   14. GATHERINGS (expanding panels)
+   ========================================================================== */
+.panels { display: grid; gap: 14px; }
+.panel { position: relative; isolation: isolate; overflow: hidden; border-radius: var(--radius); min-height: 470px; color: var(--bone); background: var(--ink-3); }
+.panel > img { position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%; object-fit: cover; transition: transform 1.4s var(--ease), filter .9s var(--ease); }
+.panel::after { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(12,10,9,.2) 0%, rgba(12,10,9,.05) 35%, rgba(12,10,9,.9) 100%); }
+.panel__inner { position: absolute; inset: 0; padding: clamp(22px, 2.4vw, 32px); display: flex; flex-direction: column; justify-content: space-between; }
+.panel__top { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.panel__num { font: 500 12px/1 var(--mono); letter-spacing: .1em; color: var(--muted-d); }
+.panel__tag { padding: 8px 13px; border-radius: 999px; background: rgba(245,239,230,.12); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); font: 500 11px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; }
+.panel__title { font: 400 clamp(2.1rem, 3.3vw, 3.5rem)/.98 var(--serif); letter-spacing: -.02em; max-width: 14ch; }
+.panel__desc { margin-top: 14px; max-width: 42ch; color: rgba(245,239,230,.78); font-size: 15px; line-height: 1.65; }
+.panel .link-arrow { margin-top: 20px; color: var(--bone); }
+.panel__v { display: none; }
+@media (min-width: 1000px) {
+  .panels { display: flex; height: clamp(540px, 70vh, 700px); }
+  .panel { flex: 1; min-height: 0; cursor: pointer; transition: flex .95s var(--ease); }
+  .panel.is-active { flex: 2.7; cursor: default; }
+  .panel:not(.is-active) > img { filter: grayscale(.85) brightness(.55); transform: scale(1.06); }
+  .panel__content { opacity: 0; transform: translateY(24px); transition: opacity .4s, transform .6s var(--ease); width: min(560px, 100%); }
+  .panel.is-active .panel__content { opacity: 1; transform: none; transition: opacity .7s .35s, transform .9s var(--ease) .3s; }
+  .panel__v { display: block; position: absolute; left: clamp(22px, 2.4vw, 32px); bottom: clamp(26px, 2.6vw, 34px); writing-mode: vertical-rl; rotate: 180deg; font: 400 clamp(1.7rem, 2.2vw, 2.3rem)/1 var(--serif); letter-spacing: -.01em; white-space: nowrap; transition: opacity .5s .3s; }
+  .panel.is-active .panel__v { opacity: 0; transition: opacity .2s; }
+  .panel:not(.is-active) .panel__tag { opacity: 0; }
+}
+
+/* ==========================================================================
+   15. TESTIMONIES
+   ========================================================================== */
+.testi { display: grid; gap: clamp(40px, 5vw, 96px); align-items: center; }
+.t-media { position: relative; aspect-ratio: 4 / 4.8; border-radius: var(--radius); overflow: hidden; background: var(--bone-2); max-width: 560px; touch-action: pan-y; }
+.t-media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; scale: 1.1; transition: opacity 1s ease, scale 1.6s var(--ease); }
+.t-media img.is-active { opacity: 1; scale: 1; }
+.t-media__count { position: absolute; left: 18px; bottom: 18px; padding: 9px 14px; border-radius: 999px; background: rgba(12,10,9,.55); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); color: var(--bone); font: 500 12px/1 var(--mono); letter-spacing: .1em; }
+.t-mark { display: block; height: .55em; font: 400 clamp(6rem, 10vw, 9rem)/1 var(--serif); color: var(--flame); margin-bottom: 18px; }
+.t-slides { display: grid; }
+.t-slide { grid-area: 1 / 1; opacity: 0; visibility: hidden; transform: translateY(18px); transition: opacity .6s ease, transform .9s var(--ease), visibility 0s linear .6s; }
+.t-slide.is-active { opacity: 1; visibility: visible; transform: none; transition: opacity .8s ease .15s, transform 1s var(--ease) .15s, visibility 0s; }
+.t-slide blockquote p { font: 400 clamp(1.55rem, 2.55vw, 2.55rem)/1.2 var(--serif); letter-spacing: -.012em; text-wrap: pretty; }
+.t-person { display: flex; align-items: center; gap: 14px; margin-top: 30px; }
+.t-person__avatar { width: 46px; height: 46px; border-radius: 50%; overflow: hidden; }
+.t-person__avatar img { width: 100%; height: 100%; object-fit: cover; }
+.t-person strong { display: block; font-weight: 600; font-size: 16px; }
+.t-person span { font: 500 11.5px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--accent-text); }
+.t-controls { display: flex; align-items: center; gap: 22px; margin-top: clamp(36px, 4vw, 56px); }
+.t-bars { display: flex; gap: 8px; flex: 1; }
+.t-bar { flex: 1; height: 24px; position: relative; }
+.t-bar::before, .t-bar span { content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 2px; margin-top: -1px; border-radius: 2px; }
+.t-bar::before { background: var(--line); }
+.t-bar span { background: var(--fg); transform: scaleX(0); transform-origin: left; }
+.t-bar.done span { transform: scaleX(1); }
+.t-bar.active span { animation: t-fill var(--t-dur, 8s) linear forwards; }
+.testi.is-paused .t-bar.active span { animation-play-state: paused; }
+@keyframes t-fill { to { transform: scaleX(1); } }
+.t-arrows { display: flex; gap: 10px; }
+.round-btn { width: 56px; height: 56px; border-radius: 50%; border: 1px solid var(--line); display: grid; place-items: center; font-size: 20px; transition: background-color .35s, color .35s, border-color .35s, translate .6s var(--ease); }
+.round-btn:hover { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+@media (min-width: 1000px) { .testi { grid-template-columns: minmax(0, .82fr) minmax(0, 1.18fr); } }
+
+/* ==========================================================================
+   16. CORE VALUES — C.H.A.R.I.S
+   ========================================================================== */
+.values-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-top: 1px solid var(--line); border-left: 1px solid var(--line); }
+.value { position: relative; isolation: isolate; overflow: hidden; min-height: clamp(250px, 28vw, 390px); padding: 20px 20px 24px; display: flex; flex-direction: column; justify-content: space-between; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); transition: color .5s var(--ease); }
+.value::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--ink); transform: translateY(101%); transition: transform .7s var(--ease); }
+.value:hover { color: var(--bone); }
+.value:hover::before { transform: none; }
+.value__idx { font: 500 11.5px/1 var(--mono); letter-spacing: .12em; display: flex; justify-content: space-between; align-items: center; opacity: .75; }
+.value__idx .i { width: 12px; height: 12px; transition: rotate .8s var(--ease), color .4s; }
+.value:hover .value__idx .i { rotate: 90deg; color: var(--flame); }
+.value__letter { font: 400 clamp(5.2rem, 11vw, 11rem)/.78 var(--serif); letter-spacing: -.04em; transition: color .5s, transform .8s var(--ease); }
+.value:hover .value__letter { color: var(--flame); font-style: italic; transform: translateY(-6px); }
+.value__name { font-weight: 600; font-size: clamp(1rem, 1.3vw, 1.15rem); letter-spacing: -.01em; }
+.value__desc { margin-top: 6px; font-size: 14px; line-height: 1.55; color: var(--muted); transition: color .5s; }
+.value:hover .value__desc { color: var(--muted-d); }
+@media (min-width: 720px) { .values-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (min-width: 1200px) { .values-grid { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
+
+/* ==========================================================================
+   17. EVOLVE30
+   ========================================================================== */
+.evolve { display: grid; gap: clamp(64px, 7vw, 110px); align-items: center; }
+.evolve__copy h2 { margin: 26px 0 26px; }
+.pillars { display: flex; flex-wrap: wrap; gap: 8px; margin: 30px 0 36px; }
+.pillars li { display: inline-flex; align-items: center; gap: 10px; padding: 9px 15px 9px 10px; border-radius: 999px; border: 1px solid var(--line); font-size: 13.5px; font-weight: 500; }
+.pillars li b { width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; background: var(--flame); color: var(--ink); font: 500 10px/1 var(--mono); }
+
+.field { display: flex; align-items: center; gap: 6px; padding: 6px; border-radius: 999px; border: 1px solid var(--line); background: rgba(245,239,230,.04); max-width: 520px; transition: border-color .3s, background-color .3s; }
+.t-bone .field { background: rgba(255,255,255,.5); }
+.field:focus-within { border-color: var(--flame); }
+.field input { flex: 1; min-width: 0; width: 100%; height: 46px; padding: 0 16px; border: 0; background: transparent; outline: none; font-size: 15px; color: var(--fg); }
+.field input::placeholder { color: var(--faint); }
+.field .btn { height: 46px; padding-left: 20px; }
+.field .btn__icon { width: 34px; height: 34px; font-size: 16px; }
+.form-note { margin-top: 12px; font-size: 13px; color: var(--faint); }
+.form-note.is-success { color: var(--accent-text); }
+
+.devo { position: relative; aspect-ratio: 1 / 1.02; max-width: 640px; width: 100%; justify-self: center; }
+.devo__photo { position: absolute; left: 0; top: 0; width: 76%; height: 70%; border-radius: var(--radius); overflow: hidden; rotate: -3deg; }
+.devo__photo img { width: 100%; height: 118%; object-fit: cover; }
+.devo__card {
+  position: absolute; right: 0; bottom: 2%; width: 68%; rotate: 2.5deg;
+  background: var(--paper); color: var(--ink); border-radius: 22px; padding: clamp(20px, 2.4vw, 30px);
+  box-shadow: 0 50px 90px -30px rgba(0,0,0,.75);
+}
+.devo__meta { display: flex; justify-content: space-between; gap: 12px; font: 500 10.5px/1.3 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--muted-l); }
+.devo__meta b { color: var(--flame-ink); font-weight: 500; }
+.devo__card h3 { margin: clamp(18px, 2.4vw, 30px) 0 12px; font: 400 clamp(1.7rem, 2.8vw, 2.6rem)/1 var(--serif); letter-spacing: -.02em; }
+.devo__card h3 em { color: var(--flame); }
+.devo__card p { font-size: 14px; line-height: 1.6; color: var(--muted-l); }
+.devo__foot { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--line-l); font-size: 13px; font-weight: 600; }
+.devo__foot a { display: inline-flex; align-items: center; gap: 6px; color: var(--flame-ink); }
+.devo__sticker { position: absolute; left: 6%; bottom: 6%; width: clamp(96px, 11vw, 124px); aspect-ratio: 1; border-radius: 50%; background: var(--flame); color: var(--ink); display: grid; place-items: center; text-align: center; rotate: -12deg; box-shadow: 0 20px 40px -14px rgba(255,69,0,.6); }
+.devo__sticker strong { display: block; font: italic 400 clamp(1.8rem, 2.6vw, 2.3rem)/.9 var(--serif); }
+.devo__sticker span { display: block; margin-top: 4px; font: 500 9.5px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; }
+
+.channels { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: clamp(72px, 9vw, 130px); }
+.channel { position: relative; display: grid; gap: 34px; padding: 22px; border-radius: 20px; border: 1px solid var(--line); transition: background-color .45s, border-color .45s, color .45s, translate .6s var(--ease); }
+.channel:hover { background: var(--bone); color: var(--ink); border-color: var(--bone); translate: 0 -4px; }
+.channel__top { display: flex; justify-content: space-between; align-items: center; }
+.channel__icon { width: 44px; height: 44px; border-radius: 50%; background: rgba(245,239,230,.08); display: grid; place-items: center; font-size: 20px; transition: background-color .45s, color .45s; }
+.channel:hover .channel__icon { background: var(--flame); color: var(--ink); }
+.channel__go { font-size: 18px; color: var(--faint); transition: rotate .5s var(--ease), color .3s; }
+.channel:hover .channel__go { rotate: 45deg; color: var(--ink); }
+.channel strong { display: block; font: 400 clamp(1.5rem, 2vw, 1.9rem)/1 var(--serif); letter-spacing: -.01em; }
+.channel > span:last-child > span { display: block; margin-top: 6px; font-size: 13.5px; color: var(--muted); transition: color .45s; }
+.channel:hover > span:last-child > span { color: var(--muted-l); }
+@media (min-width: 900px) { .channels { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+@media (min-width: 1000px) { .evolve { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } }
+
+/* ==========================================================================
+   18. GIVE
+   ========================================================================== */
+.give { display: grid; gap: clamp(56px, 6vw, 96px); align-items: center; }
+.give__copy h2 { margin: 26px 0 0; }
+.scripture { margin: clamp(30px, 4vw, 46px) 0; padding: clamp(22px, 2.6vw, 32px); border-radius: 20px; background: var(--paper); border: 1px solid var(--line); }
+.scripture p { font: italic 400 clamp(1.35rem, 2vw, 1.85rem)/1.28 var(--serif); letter-spacing: -.01em; }
+.scripture cite { display: block; margin-top: 16px; font: 500 11.5px/1 var(--mono); font-style: normal; letter-spacing: .14em; text-transform: uppercase; color: var(--accent-text); }
+.give__copy .copy { max-width: 52ch; }
+.give__copy .btn-row { margin-top: 32px; }
+
+.yt { position: relative; display: block; width: 100%; aspect-ratio: 16 / 10; border-radius: var(--radius); overflow: hidden; background: var(--ink); color: var(--bone); isolation: isolate; }
+.yt img { position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%; object-fit: cover; transition: scale 1.4s var(--ease); }
+.yt:hover img { scale: 1.05; }
+.yt::after { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(12,10,9,.1), rgba(12,10,9,.75)); }
+.yt__play { position: absolute; left: 50%; top: 50%; translate: -50% -50%; width: clamp(78px, 8vw, 104px); aspect-ratio: 1; border-radius: 50%; background: var(--flame); color: var(--ink); display: grid; place-items: center; font-size: 28px; transition: scale .6s var(--ease); }
+.yt__play::before { content: ""; position: absolute; inset: -14px; border-radius: 50%; border: 1px solid rgba(255,69,0,.6); animation: ring 2.4s var(--ease) infinite; }
+@keyframes ring { from { scale: .8; opacity: 1; } to { scale: 1.35; opacity: 0; } }
+.yt:hover .yt__play { scale: 1.08; }
+.yt__label { position: absolute; left: 20px; right: 20px; bottom: 18px; display: flex; justify-content: space-between; align-items: end; gap: 16px; font: 500 11.5px/1.4 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: rgba(245,239,230,.85); text-align: left; }
+.yt__label strong { display: block; font: 400 clamp(1.3rem, 2vw, 1.8rem)/1.1 var(--serif); letter-spacing: -.01em; text-transform: none; color: var(--bone); margin-top: 6px; }
+.yt iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+
+.impact { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0; margin-top: 18px; border-top: 1px solid var(--line); }
+.impact li { padding: 20px 18px 6px 0; }
+.impact li:nth-child(odd) { border-right: 1px solid var(--line); }
+.impact li:nth-child(even) { padding-left: 18px; }
+.impact li:nth-child(n+3) { border-top: 1px solid var(--line); }
+.impact strong { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 15.5px; }
+.impact strong .i { color: var(--flame); width: .95em; height: .95em; }
+.impact span { display: block; margin-top: 6px; font-size: 14px; color: var(--muted); line-height: 1.55; padding-bottom: 14px; }
+@media (min-width: 1000px) { .give { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } }
+
+/* ==========================================================================
+   19. CLOSING CTA
+   ========================================================================== */
+.cta { position: relative; isolation: isolate; overflow: hidden; min-height: clamp(620px, 96vh, 900px); display: grid; place-items: center; text-align: center; color: var(--bone); background: var(--ink); }
+.cta__bg { position: absolute; inset: -12% 0; z-index: -2; }
+.cta__bg img { width: 100%; height: 100%; object-fit: cover; }
+.cta::after { content: ""; position: absolute; inset: 0; z-index: -1; background: radial-gradient(80% 60% at 50% 110%, rgba(255,69,0,.45), transparent 70%), linear-gradient(180deg, var(--ink) 0%, rgba(12,10,9,.72) 22%, rgba(12,10,9,.72) 70%, var(--ink) 100%); }
+.cta__script { width: clamp(220px, 30vw, 440px); margin: 0 auto clamp(26px, 3vw, 40px); opacity: .95; }
+.cta h2 { max-width: 13ch; margin-inline: auto; }
+.cta p.lede { margin: 28px auto 0; color: rgba(245,239,230,.76); }
+.cta .btn-row { justify-content: center; margin-top: 38px; }
+.cta__times { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px 26px; margin-top: 46px; font: 500 11.5px/1.5 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: rgba(245,239,230,.62); }
+.cta__times span { display: inline-flex; align-items: center; gap: 10px; }
+
+/* ==========================================================================
+   20. FOOTER
+   ========================================================================== */
+.footer { padding-top: clamp(80px, 9vw, 130px); overflow: hidden; }
+.footer__news { display: grid; gap: 30px; padding-bottom: clamp(56px, 6vw, 80px); border-bottom: 1px solid var(--line); }
+.footer__news h2 { max-width: 16ch; }
+.footer__grid { display: grid; gap: 48px; padding-block: clamp(56px, 6vw, 84px); }
+.footer__brand img { width: 250px; }
+.footer__brand p { margin-top: 22px; max-width: 38ch; color: var(--muted); font-size: 15px; line-height: 1.7; }
+.footer__addr { margin-top: 22px; display: grid; gap: 4px; font-size: 14px; color: var(--faint); }
+.socials { display: flex; gap: 10px; margin-top: 26px; }
+.socials a { width: 46px; height: 46px; border-radius: 50%; border: 1px solid var(--line); display: grid; place-items: center; font-size: 18px; color: var(--muted); transition: background-color .35s, color .35s, border-color .35s, translate .5s var(--ease); }
+.socials a:hover { background: var(--flame); color: var(--ink); border-color: var(--flame); translate: 0 -3px; }
+.footer__cols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px 24px; }
+.footer__cols h3 { font: 500 11.5px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase; color: var(--flame); margin-bottom: 20px; }
+.footer__cols li + li { margin-top: 12px; }
+.footer__cols a { color: var(--muted); font-size: 15px; transition: color .3s; background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat; padding-bottom: 2px; transition: color .3s, background-size .45s var(--ease); }
+.footer__cols a:hover { color: var(--bone); background-size: 100% 1px; }
+.footer__word { font: 400 clamp(4rem, 23vw, 24rem)/.8 var(--serif); letter-spacing: -.045em; text-align: center; white-space: nowrap; margin-inline: calc(var(--gutter) * -0.5); padding-top: .06em; background: linear-gradient(180deg, rgba(245,239,230,.2) 0%, rgba(245,239,230,.02) 92%); -webkit-background-clip: text; background-clip: text; color: transparent; user-select: none; }
+.footer__word em { font-style: italic; }
+.footer__bottom { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px; padding: 26px 0 34px; border-top: 1px solid var(--line); font-size: 13px; color: var(--faint); }
+.to-top { display: inline-flex; align-items: center; gap: 10px; font: 500 11.5px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+.to-top span { width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--line); display: grid; place-items: center; font-size: 16px; transition: background-color .3s, color .3s, translate .5s var(--ease); }
+.to-top:hover span { background: var(--bone); color: var(--ink); translate: 0 -3px; }
+@media (min-width: 1000px) {
+  .footer__news { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: end; }
+  .footer__news form { justify-self: end; width: 100%; max-width: 520px; }
+  .footer__grid { grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.9fr); }
+  .footer__cols { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+/* ==========================================================================
+   21. SCROLL REVEALS (JS adds .ready + .is-in)
+   ========================================================================== */
+.ready [data-reveal] { opacity: 0; transform: translateY(30px); transition: opacity 1s var(--ease) var(--d, 0s), transform 1.2s var(--ease) var(--d, 0s); }
+.ready [data-reveal].is-in { opacity: 1; transform: none; }
+.ready [data-reveal="img"] { opacity: 1; transform: none; clip-path: inset(100% 0 0 0 round var(--radius)); transition: clip-path 1.5s var(--ease) var(--d, 0s); }
+.ready [data-reveal="img"].is-in { clip-path: inset(0 0 0 0 round var(--radius)); }
+.ready [data-reveal="img"] > img { scale: 1.22; transition: scale 2s var(--ease) var(--d, 0s); }
+.ready [data-reveal="img"].is-in > img { scale: 1; }
+
+/* ==========================================================================
+   22. REDUCED MOTION
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; transition-delay: 0s !important; }
+  .marquee__track { animation: none; }
+  .ready .statement .sw { opacity: 1; }
+  .badge svg { animation: none; }
+}
+</style>
+</head>
+
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<!-- Icon sprite (reuse with <svg class="i"><use href="#i-name"/></svg>) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-arrow-ur" viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-arrow-r" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-arrow-l" viewBox="0 0 24 24"><path d="M19 12H5M11 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-arrow-up" viewBox="0 0 24 24"><path d="M12 19V5M6 11l6-6 6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5.2v13.6L19 12z" fill="currentColor"/></symbol>
+  <symbol id="i-pause" viewBox="0 0 24 24"><path d="M7.5 5h3v14h-3zM13.5 5h3v14h-3z" fill="currentColor"/></symbol>
+  <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 1.5c.6 5.6 4.9 9.9 10.5 10.5-5.6.6-9.9 4.9-10.5 10.5C11.4 16.9 7.1 12.6 1.5 12 7.1 11.4 11.4 7.1 12 1.5Z" fill="currentColor"/></symbol>
+  <symbol id="i-youtube" viewBox="0 0 24 24"><path d="M20.5 8.5c-.2-1.5-1.3-2.6-2.8-2.8C16.1 5.5 14 5.4 12 5.4s-4.1.1-5.7.3C4.8 5.9 3.7 7 3.5 8.5c-.2 1.2-.3 2.3-.3 3.5s.1 2.3.3 3.5c.2 1.5 1.3 2.6 2.8 2.8 1.6.2 3.7.3 5.7.3s4.1-.1 5.7-.3c1.5-.2 2.6-1.3 2.8-2.8.2-1.2.3-2.3.3-3.5s-.1-2.3-.3-3.5Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="m10 9.4 4.6 2.6-4.6 2.6Z" fill="currentColor"/></symbol>
+  <symbol id="i-instagram" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="3.6"/></g><circle cx="17.2" cy="6.8" r="1" fill="currentColor"/></symbol>
+  <symbol id="i-facebook" viewBox="0 0 24 24"><path d="M13.4 21v-7.3h2.4l.4-3h-2.8V8.8c0-.9.2-1.5 1.5-1.5h1.5V4.6c-.3 0-1.2-.1-2.2-.1-2.3 0-3.8 1.4-3.8 4v2.2H8v3h2.4V21h3Z" fill="currentColor"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M18.9 3H21l-6.5 7.5L22.2 21h-6l-4.7-6.1L6.2 21H4.1l6.9-7.9L1.8 3h6.1l4.2 5.5L18.9 3Zm-2 16h1.7L7 4.9H5.2L16.9 19Z" fill="currentColor"/></symbol>
+  <symbol id="i-spotify" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M7.5 9.6c3-1 6.6-.8 9.3.7M8 12.6c2.5-.8 5.3-.5 7.5.7M8.6 15.4c1.9-.6 3.9-.4 5.6.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+  <symbol id="i-pray" viewBox="0 0 24 24"><path d="M12 3c-.8 2.2-2.6 3.4-2.6 6.2V14l-3.9 3.6V21M12 3c.8 2.2 2.6 3.4 2.6 6.2V14l3.9 3.6V21M12 9v8" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 5.5C6.5 4.3 9.3 4.3 12 6c2.7-1.7 5.5-1.7 8-.5V19c-2.5-1.2-5.3-1.2-8 .5-2.7-1.7-5.5-1.7-8-.5V5.5ZM12 6v13.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s6-5.8 6-11a6 6 0 1 0-12 0c0 5.2 6 11 6 11Z" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="10" r="2.2" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 7.5V12l3 2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+</svg>
+
+<!-- ======================= INTRO (first visit this session) ======================= -->
+<div class="intro" aria-hidden="true">
+  <div class="intro__inner">
+    <img class="intro__mark" src="assets/logo-mark.png" alt="">
+    <img class="intro__script" src="assets/good-news-always.png" alt="">
+  </div>
+  <div class="intro__bar"><span>Charis Tribe Global Church</span><span class="intro__line"></span><span>Welcome home</span></div>
+</div>
+
+<!-- ======================= HEADER ======================= -->
+<header class="site-header" data-header>
+  <div class="wrap nav">
+    <a class="brand" href="#top" aria-label="Charis Tribe Global Church — home">
+      <img src="assets/logo-mark.png" alt="" width="46" height="46">
+      <span class="brand__name">Charis Tribe<small>Global Church</small></span>
+    </a>
+
+    <nav aria-label="Primary">
+      <ul class="nav__links">
+        <li><a href="https://charistribe.vercel.app/about">About</a></li>
+        <li><a href="https://charistribe.vercel.app/ministries">Ministries</a></li>
+        <li><a href="https://charistribe.vercel.app/sermons">Sermons</a></li>
+        <li><a href="https://charistribe.vercel.app/evolve30">Evolve30</a></li>
+        <li><a href="#campuses">Campuses</a></li>
+        <li><a href="https://charistribe.vercel.app/give">Give</a></li>
+      </ul>
+    </nav>
+
+    <div class="nav__right">
+      <a class="live-pill" data-live-pill href="https://www.youtube.com/@charistribe" target="_blank" rel="noopener noreferrer">
+        <span class="dot"></span><span data-live-text>Sun · 8:00 AM WAT</span>
+      </a>
+      <a class="btn btn--flame nav__cta" href="https://charistribe.vercel.app/first-timer">
+        <span class="btn__label"><span>Plan a visit</span></span>
+        <span class="btn__icon"><svg class="i"><use href="#i-arrow-ur"/></svg></span>
+      </a>
+      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="menu" data-menu-btn>
+        <span data-when="closed">Menu</span><span data-when="open">Close</span>
+        <span class="menu-btn__lines" aria-hidden="true"></span>
+      </button>
+    </div>
+  </div>
+  <div class="progress" data-progress></div>
+</header>
+
+<!-- Mobile / tablet menu -->
+<div class="menu" id="menu" aria-label="Menu" data-menu>
+  <nav aria-label="Mobile">
+    <ul class="menu__links">
+      <li><a href="https://charistribe.vercel.app/about"><small>01</small>About</a></li>
+      <li><a href="https://charistribe.vercel.app/ministries"><small>02</small>Ministries</a></li>
+      <li><a href="https://charistribe.vercel.app/sermons"><small>03</small>Sermons</a></li>
+      <li><a href="https://charistribe.vercel.app/evolve30"><small>04</small>Evolve30</a></li>
+      <li><a href="#campuses"><small>05</small>Campuses</a></li>
+      <li><a href="https://charistribe.vercel.app/give"><small>06</small>Give</a></li>
+      <li><a href="https://charistribe.vercel.app/contact"><small>07</small>Contact</a></li>
+    </ul>
+  </nav>
+  <div class="menu__foot">
+    <a class="btn btn--flame" href="https://charistribe.vercel.app/first-timer">
+      <span class="btn__label"><span>Plan your first visit</span></span>
+      <span class="btn__icon"><svg class="i"><use href="#i-arrow-ur"/></svg></span>
+    </a>
+    <p>BEN Auto Event Place, Santos Layout, Akowonjo, Lagos<br>Sundays 8:00 AM · Wednesdays 6:00 PM</p>
+  </div>
+</div>
+
+<main id="main">
+
+<!-- ════════════════════════════════════════════════════════════════
+     SECTION: HERO
+     ════════════════════════════════════════════════════════════════ -->
+<section class="hero" id="top" data-hero-section>
+  <div class="hero__media">
+    <video data-hero-video autoplay muted loop playsinline preload="metadata" poster="assets/hero-poster.jpg" aria-hidden="true">
+      <source src="assets/hero.mp4" type="video/mp4">
+    </video>
+  </div>
+  <div class="hero__shade"></div>
+
+  <!-- Rotating "Good News Always" seal -->
+  <div class="badge" aria-hidden="true" data-hero style="--d:.9s">
+    <svg viewBox="0 0 200 200">
+      <defs><path id="badge-circle" d="M100,100 m-80,0 a80,80 0 1,1 160,0 a80,80 0 1,1 -160,0"/></defs>
+      <text><textPath href="#badge-circle" textLength="500">Good News Always ✦ Charis Tribe Global ✦ </textPath></text>
+    </svg>
+    <img src="assets/logo-mark.png" alt="">
+  </div>
+
+  <div class="wrap hero__content">
+    <p class="hero__kicker" data-hero style="--d:.05s">
+      <span class="tag">Good News Always</span>
+      <span class="kicker-long">Lagos · Ibadan · Abuja · UK · Canada · Online</span>
+      <span class="kicker-short">5 cities + online</span>
+    </p>
+
+    <h1 class="display h-xl" data-split>Raising a community<br class="br-lg"> of <em class="nowrap">world changers</em><br class="br-lg"> globally.</h1>
+
+    <div class="hero__row">
+      <p class="hero__lede" data-hero style="--d:.55s">
+        Heralding the love of Jesus Christ and the ministry of the Holy Spirit — turning many unto righteousness
+        and equipping each member to fulfil their purpose in life and ministry.
+      </p>
+      <div class="btn-row" data-hero style="--d:.7s">
+        <a class="btn btn--flame" href="https://www.youtube.com/@charistribe" target="_blank" rel="noopener noreferrer" data-magnetic>
+          <span class="btn__label"><span>Watch live</span></span>
+          <span class="btn__icon"><svg class="i"><use href="#i-play"/></svg></span>
+        </a>
+        <a class="btn btn--glass" href="#campuses" data-magnetic>
+          <span class="btn__label"><span>Find a campus near you</span></span>
+          <span class="btn__icon"><svg class="i"><use href="#i-arrow-ur"/></svg></span>
+        </a>
+      </div>
+    </div>
+
+    <div class="hero__bar" data-hero style="--d:.85s">
+      <div class="hero__stat hero__stat--next" data-next-service>
+        <span class="stat__label"><span class="dot" data-ns-dot></span><span data-ns-label>Next gathering</span></span>
+        <span class="countdown" data-ns-count aria-hidden="true"><b>--</b><i>d</i><b>--</b><i>h</i><b>--</b><i>m</i><b>--</b><i>s</i></span>
+        <span class="stat__sub" data-ns-when>Sunday Service · 8:00 AM WAT</span>
+        <button class="video-toggle hero__video-toggle-mobile" type="button" aria-pressed="false" data-video-toggle>
+          <span class="video-toggle__icon"><svg class="i i-pause"><use href="#i-pause"/></svg><svg class="i i-play"><use href="#i-play"/></svg></span>
+          <span class="video-toggle__label">Pause</span>
+        </button>
+      </div>
+      <div class="hero__stat hero__stat--times">
+        <span class="stat__label">Gather with us</span>
+        <span>Sundays · 8:00 AM<br>Wednesdays · 6:00 PM</span>
+      </div>
+      <div class="hero__stat">
+        <span class="stat__label">Lagos campus</span>
+        <span>BEN Auto Event Place, Santos Layout, Akowonjo — <a href="https://www.google.com/maps/search/?api=1&amp;query=BEN+Auto+Event+Place+Santos+Layout+Akowonjo+Lagos" target="_blank" rel="noopener noreferrer">Directions</a></span>
+      </div>
+      <div class="hero__tools">
+        <button class="video-toggle" type="button" aria-pressed="false" data-video-toggle>
+          <span class="video-toggle__icon"><svg class="i i-pause"><use href="#i-pause"/></svg><svg class="i i-play"><use href="#i-play"/></svg></span>
+          <span class="video-toggle__label">Pause</span>
+        </button>
+        <a class="scroll-cue" href="#welcome"><span class="scroll-cue__line"></span>Scroll</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════
+     SECTION: MARQUEE BAND
+     ════════════════════════════════════════════════════════════════ -->
+<div class="marquee t-flame" aria-label="Good News Always — apostolic teaching, world evangelism, societal transformation">
+  <div class="marquee__track" aria-hidden="true">
+    <div class="marquee__group">
+      <span class="marquee__item marquee__item--i">Good News Always</span><svg class="i"><use href="#i-spark"/></svg>
+      <span class="marquee__item">Apostolic Teaching</span><svg class="i"><use href="#i-spark"/></svg>
+      <span class="marquee__item marquee__item--i">World Evangelism</span><svg class="i"><use href="#i-spark"/></svg>
+      <span class="marquee__item">Societal Transformation</span><svg class="i"><use href="#i-spark"/></svg>
+    </div>
+    <div class="marquee__group">
+      <span class="marquee__item marquee__item--i">Good News Always</span><svg class="i"><use href="#i-spark"/></svg>
+      <span class="marquee__item">Apostolic Teaching</span><svg class="i"><use href="#i-spark"/></svg>
+      <span class="marquee__item marquee__item--i">World Evangelism</span><svg class="i"><use href="#i-spark"/></svg>
+      <span class="marquee__item">Societal Transformation</span><svg class="i"><use href="#i-spark"/></svg>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════
+     SECTION: 01 WELCOME
+     ════════════════════════════════════════════════════════════════ -->
+<section class="section t-bone" id="welcome" aria-labelledby="welcome-title">
+  <div class="wrap">
+    <div class="sec-head__top" style="margin-bottom: clamp(40px, 6vw, 80px)" data-reveal>
+      <span class="eyebrow"><b>(01)</b><span class="rule"></span>Welcome home</span>
+      <span class="eyebrow hide-sm">Charis Tribe Global Church</span>
+    </div>
+
+    <h2 class="sr-only" id="welcome-title">Welcome to Charis Tribe</h2>
+    <div class="welcome__intro">
+    <aside class="define" data-reveal>
+      <p class="define__word">Charis</p>
+      <p class="define__pron">/ˈkær.ɪs/ · Greek · noun</p>
+      <p class="define__text">Grace — the free, unearned favour of God. The heartbeat of everything we teach.</p>
+    </aside>
+    <p class="statement" data-scrub>
+      Charis Tribe is more than a church. We are a <em>family</em>
+      <span class="chip-img" data-token><img src="assets/congregation.jpg" alt="" loading="lazy"></span>
+      rooted in faith, guided by God’s Word and driven by purpose
+      <span class="chip-glyph" data-token><svg class="i"><use href="#i-spark"/></svg></span>
+      a vibrant community of young adults committed to apostolic teaching, world evangelism
+      <span class="chip-img" data-token><img src="assets/worship-hands.jpg" alt="" loading="lazy"></span>
+      and societal transformation.
+    </p>
+    </div>
+
+    <div class="welcome__grid">
+      <div class="collage">
+        <div class="collage__a" data-reveal="img"><img src="assets/welcome-pastor.jpg" alt="Pastor Ransome Adewale ministering to the congregation" loading="lazy" data-speed="0.06"></div>
+        <div class="collage__b" data-reveal="img" style="--d:.15s"><img src="assets/panel-session.jpg" alt="A panel session at a Charis Tribe gathering" loading="lazy" data-speed="0.1"></div>
+        <div class="collage__card" data-reveal style="--d:.3s">
+          <span class="stat__label"><span class="dot" style="background:var(--flame)"></span>Every Sunday</span>
+          <strong>8:00 <em>am</em></strong>
+          <p>And midweek on Wednesdays at 6:00 PM. Come early — there’s a seat saved for you.</p>
+        </div>
+      </div>
+
+      <div class="welcome__copy">
+        <h3 class="display h-md" data-split>Welcome to <em>Charis Tribe.</em></h3>
+        <p class="copy" style="margin-top:26px" data-reveal>
+          Our vision is to raise kingdom‑minded world changers who influence every sphere of life with the gospel.
+          To do this, we teach the undiluted truth of Scripture with Christ as the central focus.
+        </p>
+        <p class="copy" data-reveal>
+          We take discipleship seriously — and organise regular meetings, retreats and seminars focused on achieving our God‑given vision.
+        </p>
+        <div class="btn-row" data-reveal>
+          <a class="btn btn--ink" href="https://charistribe.vercel.app/about">
+            <span class="btn__label"><span>Learn more about us</span></span>
+            <span class="btn__icon"><svg class="i"><use href="#i-arrow-ur"/></svg></span>
+          </a>
+        </div>
+
+        <div class="steps" data-reveal>
+          <p class="eyebrow steps__title">Your next step</p>
+          <a class="step" href="https://charistribe.vercel.app/first-timer">
+            <span class="step__num">01</span>
+            <span><span class="step__title">I’m new here</span><span class="step__desc" style="display:block">Tell us you’re coming — we’ll save you a seat.</span></span>
+            <span class="step__arrow"><svg class="i"><use href="#i-arrow-ur"/></svg></span>
+          </a>
+          <a class="step" href="https://www.youtube.com/@charistribe" target="_blank" rel="noopener noreferrer">
+            <span class="step__num">02</span>
+            <span><span class="step__title">Watch online</span><span class="step__desc" style="display:block">Join the live stream every Sunday, from anywhere.</span></span>
+            <span class="step__arrow"><svg class="i"><use href="#i-arrow-ur"/></svg></span>
+          </a>
+          <a class="step" href="https://charistribe.vercel.app/contact">
+            <span class="step__num">03</span>
+            <span><span class="step__title">Join a community group</span><span class="step__desc" style="display:block">Membership class, Charis Force &amp; serving teams.</span></span>
+            <span class="step__arrow"><svg class="i"><use href="#i-arrow-ur"/></svg></span>
+          </a>
+          <a class="step" href="https://charistribe.vercel.app/counselling">
+            <span class="step__num">04</span>
+            <span><span class="step__title">Prayer &amp; counselling</span><span class="step__desc" style="display:block">Biblical counsel for every season — without judgment.</span></span>
+            <span class="step__arrow"><svg class="i"><use href="#i-arrow-ur"/></svg></span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════
+     SECTION: 02 CAMPUSES
+     Each row: data-preview = index of the image in .cursor-preview below.
+     ════════════════════════════════════════════════════════════════ -->
+<section class="section t-ink" id="campuses" aria-labelledby="campuses-title">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-head__top" data-reveal>
+        <span class="eyebrow"><b>(02)</b><span class="rule"></span>Join Charis Tribe in your city</span>
+        <span class="eyebrow hide-sm">5 cities + online</span>
+      </div>
+      <div class="sec-head__body">
+        <h2 class="display h-lg" id="campuses-title" data-split>We are a <em>tribe</em> in every city.</h2>
+        <div class="sec-head__aside" data-reveal>
+          <p class="lede">A growing family of believers and leaders, grounded in Scripture and centred on Christ. There’s a Charis Tribe city near you — come worship with us.</p>
+        </div>
+      </div>
+    </div>
+
+    <ul class="campus-list" data-campus-list>
+      <li class="campus" data-reveal>
+        <a href="https://bit.ly/charistribelagos" target="_blank" rel="noopener noreferrer" data-preview="0">
+          <span class="campus__num">01</span>
+          <span><span class="campus__city">Lagos</span><span class="campus__detail">Akowonjo · Nigeria</span></span>
+          <span class="campus__meta"><strong>BEN Auto Event Place</strong>Sun 8:00 AM · Wed 6:00 PM</span>
+          <span class="campus__end"><span class="campus__thumb"><img src="assets/campus-lagos.jpg" alt="" loading="lazy"></span><span class="campus__arrow"><svg class="i"><use href="#i-arrow-ur"/></svg></span></span>
+        </a>
+      </li>
+      <li class="campus" data-reveal>
+        <a href="https://bit.ly/charistribeibadan" target="_blank" rel="noopener noreferrer" data-preview="1">
+          <span class="campus__num">02</span>
+          <span><span class="campus__city">Ibadan</span><span class="campus__detail">Oyo State · Nigeria</span></span>
+          <span class="campus__meta"><strong>Ibadan campus</strong>Connect with the team</span>
+          <span class="campus__end"><span class="campus__thumb"><img src="assets/campus-ibadan.jpg" alt="" loading="lazy"></span><span class="campus__arrow"><svg class="i"><use href="#i-arrow-ur"/></svg></span></span>
+        </a>
+      </li>
+      <li class="campus" data-reveal>
+        <a href="https://bit.ly/charistribeabuja" target="_blank" rel="noopener noreferrer" data-preview="2">
+          <span class="campus__num">03</span>
+          <span><span class="campus__city">Abuja</span><span class="campus__detail">FCT · Nigeria</span></span>
+          <span class="campus__meta"><strong>Abuja campus</strong>Connect with the team</span>
+          <span class="campus__end"><span class="campus__thumb"><img src="assets/campus-abuja.jpg" alt="" loading="lazy"></span><span class="campus__arrow"><svg class="i"><use href="#i-arrow-ur"/></svg></span></span>
+        </a>
+      </li>
+      <li class="campus" data-reveal>
+        <a href="https://bit.ly/charistribeuk" target="_blank" rel="noopener noreferrer" data-preview="3">
+          <span class="campus__num">04</span>
+          <span><span class="campus__city">United Kingdom</span><span class="campus__detail">Europe</span></span>
+          <span class="campus__meta"><strong>UK campus</strong>Connect with the team</span>
+          <span class="campus__end"><span class="campus__thumb"><img src="https://images.unsplash.com/photo-1488747279002-c8523379faaa?auto=format&amp;fit=crop&amp;w=600&amp;q=75" alt="" loading="lazy"></span><span class="campus__arrow"><svg class="i"><use href="#i-arrow-ur"/></svg></span></span>
+        </a>
+      </li>
+      <li class="campus" data-reveal>
+        <a href="https://bit.ly/mycharistribecanada" target="_blank" rel="noopener noreferrer" data-preview="4">
+          <span class="campus__num">05</span>
+          <span><span class="campus__city">Canada</span><span class="campus__detail">North America</span></span>
+          <span class="campus__meta"><strong>Canada campus</strong>Connect with the team</span>
+          <span class="campus__end"><span class="campus__thumb"><img src="assets/campus-canada.jpg" alt="" loading="lazy"></span><span class="campus__arrow"><svg class="i"><use href="#i-arrow-ur"/></svg></span></span>
+        </a>
+      </li>
+      <li class="campus" data-reveal>
+        <a href="https://www.youtube.com/@charistribe" target="_blank" rel="noopener noreferrer" data-preview="5">
+          <span class="campus__num">06</span>
+          <span><span class="campus__city">Online</span><span class="campus__detail">Worldwide</span></span>
+          <span class="campus__meta"><strong>Charis Tribe Online</strong>Live every Sunday</span>
+          <span class="campus__end"><span class="campus__thumb"><img src="assets/campus-online.jpg" alt="" loading="lazy"></span><span class="campus__arrow"><svg class="i"><use href="#i-arrow-ur"/></svg></span></span>
+        </a>
+      </li>
+    </ul>
+
+    <div class="campus-foot" data-reveal>
+      <p>Can’t find your city yet? Worship with us online — and help us plant the next one.</p>
+      <a class="link-arrow" href="https://charistribe.vercel.app/contact">Talk to the campus team <svg class="i"><use href="#i-arrow-ur"/></svg></a>
+    </div>
+  </div>
+
+  <!-- Floating preview that follows the cursor (desktop only). Order matches data-preview above. -->
+  <div class="cursor-preview" aria-hidden="true" data-cursor-preview>
+    <img src="assets/campus-lagos.jpg" alt="" loading="lazy">
+    <img src="assets/campus-ibadan.jpg" alt="" loading="lazy">
+    <img src="assets/campus-abuja.jpg" alt="" loading="lazy">
+    <img src="https://images.unsplash.com/photo-1488747279002-c8523379faaa?auto=format&amp;fit=crop&amp;w=900&amp;q=75" alt="" loading="lazy">
+    <img src="assets/campus-canada.jpg" alt="" loading="lazy">
+    <img src="assets/campus-online.jpg" alt="" loading="lazy">
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════
+     SECTION: 03 LEAD PASTORS
+     ════════════════════════════════════════════════════════════════ -->
+<section class="section t-bone" id="pastors" aria-labelledby="pastors-title">
+  <div class="wrap pastors">
+    <figure class="stage" data-reveal="img">
+      <span class="stage__sun"></span>
+      <span class="stage__ring"></span>
+      <span class="stage__ring stage__ring--2"></span>
+      <div class="stage__cutout" data-speed="-0.04"><img src="assets/pastor-cutout.webp" alt="Pastor Ransome Adewale" loading="lazy"></div>
+      <span class="stage__fade"></span>
+      <figure class="stage__inset">
+        <img src="assets/pastors-ransome-rita.jpg" alt="Pastors Ransome and Rita Adewale together on stage" loading="lazy">
+        <figcaption>With Pastor Rita</figcaption>
+      </figure>
+      <figcaption class="stage__caption">
+        <strong>Ransome Adewale</strong>
+        <span>Founder &amp; Lead Pastor</span>
+      </figcaption>
+    </figure>
+
+    <div class="pastors__copy">
+      <span class="eyebrow" data-reveal><b>(03)</b><span class="rule"></span>Our lead pastors</span>
+      <h2 class="display h-lg" id="pastors-title" data-split>Pastors Ransome <em>&amp;</em> Rita Adewale</h2>
+      <p class="roles" data-reveal>Lead Pastor · Co‑Lead Pastor · Lagos, Nigeria</p>
+
+      <blockquote class="pull" data-reveal>
+        <p>“Establishing God’s people in the knowledge of Jesus Christ and the ministry of the Holy Spirit.”</p>
+      </blockquote>
+
+      <p class="copy" data-reveal>
+        Pastor Ransome Adewale is the Founder and Lead Pastor of Charis Tribe Global Church. He ministers with a strong flow
+        of the anointing of the Holy Spirit, accompanied with healings and miracles — and is also a songwriter and an instrumentalist.
+      </p>
+
+      <details class="more" data-reveal>
+        <summary>
+          <span class="more__icon"><svg class="i"><use href="#i-plus"/></svg></span>
+          <span data-when="closed">Read the full story</span><span data-when="open">Show less</span>
+        </summary>
+        <div class="more__body">
+          <p class="copy">He is the President of Ransome Adewale Ministries International and the founder of the School of Maturity and Ministry — an interdenominational outfit committed to strong discipleship, equipping believers for the work of ministry and the strengthening of local churches.</p>
+          <p class="copy">He champions Evolve30, an online Bible study where he writes daily to help people prioritise spiritual growth and develop a culture of Bible study. He is the convener of Charis Campmeeting — an annual assemblage of believers upholding the finished works of Jesus Christ through sound doctrine and the demonstration of the Spirit and power — and organises Grace Faith Conferences from city to city.</p>
+          <p class="copy">He is married to Pastor Rita, co‑lead Pastor at Charis Tribe Global Church and his partner in life and ministry. They reside in Lagos, Nigeria, and are blessed with two beautiful children, Daystar and Heaven.</p>
+        </div>
+      </details>
+
+      <div class="platforms" data-reveal>
+        <span class="eyebrow">Ministries &amp; platforms</span>
+        <ul>
+          <li>Ransome Adewale Ministries Int’l</li>
+          <li>School of Maturity &amp; Ministry</li>
+          <li>Evolve30</li>
+          <li>Charis Campmeeting</li>
+          <li>Grace Faith Conferences</li>
+        </ul>
+      </div>
+
+      <div data-reveal>
+        <a class="btn btn--ink" href="https://charistribe.vercel.app/about">
+          <span class="btn__label"><span>Meet our pastors</span></span>
+          <span class="btn__icon"><svg class="i"><use href="#i-arrow-ur"/></svg></span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════
+     SECTION: 04 GATHERINGS — "We don't do life alone"
+     ════════════════════════════════════════════════════════════════ -->
+<section class="section t-ink" id="gatherings" aria-labelledby="gatherings-title">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-head__top" data-reveal>
+        <span class="eyebrow"><b>(04)</b><span class="rule"></span>Community &amp; gatherings</span>
+        <span class="eyebrow hide-sm">Find your tribe, build together</span>
+      </div>
+      <div class="sec-head__body">
+        <h2 class="display h-lg" id="gatherings-title" data-split>We don’t do life <em>alone.</em></h2>
+        <div class="sec-head__aside" data-reveal>
+          <p class="lede">More than a Sunday service — a living rhythm of discipleship where people are formed, equipped and celebrated in real relationship.</p>
+          <a class="link-arrow" href="https://charistribe.vercel.app/ministries">Explore all ministries <svg class="i"><use href="#i-arrow-ur"/></svg></a>
+        </div>
+      </div>
+    </div>
+
+    <div class="panels" data-panels>
+      <article class="panel is-active" data-reveal tabindex="-1">
+        <img src="assets/school-of-maturity.jpg" alt="Students at the School of Maturity and Ministry" loading="lazy">
+        <span class="panel__v" aria-hidden="true">School of Maturity</span>
+        <div class="panel__inner">
+          <div class="panel__top"><span class="panel__num">01 / 03</span><span class="panel__tag">Discipleship</span></div>
+          <div class="panel__content">
+            <h3 class="panel__title">School of Maturity &amp; Ministry</h3>
+            <p class="panel__desc">An interdenominational school committed to strong discipleship — equipping believers for the work of ministry and strengthening local churches.</p>
+            <a class="link-arrow" href="https://charistribe.vercel.app/ministries">Learn more <svg class="i"><use href="#i-arrow-ur"/></svg></a>
+          </div>
+        </div>
+      </article>
+      <article class="panel" data-reveal style="--d:.1s" tabindex="-1">
+        <img src="assets/campmeeting.jpg" alt="Worship at Charis Campmeeting" loading="lazy">
+        <span class="panel__v" aria-hidden="true">Charis Campmeeting</span>
+        <div class="panel__inner">
+          <div class="panel__top"><span class="panel__num">02 / 03</span><span class="panel__tag">Annual</span></div>
+          <div class="panel__content">
+            <h3 class="panel__title">Charis Campmeeting</h3>
+            <p class="panel__desc">An annual assemblage upholding the finished works of Christ through sound doctrine and the demonstration of the Spirit and power.</p>
+            <a class="link-arrow" href="https://charistribe.vercel.app/ministries">Learn more <svg class="i"><use href="#i-arrow-ur"/></svg></a>
+          </div>
+        </div>
+      </article>
+      <article class="panel" data-reveal style="--d:.2s" tabindex="-1">
+        <img src="assets/grace-faith-conference.jpg" alt="Grace Faith Conference congregation" loading="lazy">
+        <span class="panel__v" aria-hidden="true">Grace Faith Conferences</span>
+        <div class="panel__inner">
+          <div class="panel__top"><span class="panel__num">03 / 03</span><span class="panel__tag">City to city</span></div>
+          <div class="panel__content">
+            <h3 class="panel__title">Grace Faith Conferences</h3>
+            <p class="panel__desc">City‑to‑city gatherings raising world changers through encounters with the Word and the Holy Spirit.</p>
+            <a class="link-arrow" href="https://charistribe.vercel.app/ministries">Learn more <svg class="i"><use href="#i-arrow-ur"/></svg></a>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════
+     SECTION: 05 TESTIMONIES
+     Add a slide: copy one .t-slide + one image in .t-media + one .t-bar.
+     ════════════════════════════════════════════════════════════════ -->
+<section class="section t-bone" id="testimonies" aria-labelledby="testimonies-title">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-head__top" data-reveal>
+        <span class="eyebrow"><b>(05)</b><span class="rule"></span>Testimonies</span>
+        <a class="link-arrow" href="https://charistribe.vercel.app/testimonies">See all testimonies <svg class="i"><use href="#i-arrow-ur"/></svg></a>
+      </div>
+      <h2 class="display h-lg" id="testimonies-title" data-split>What God is <em>doing.</em></h2>
+    </div>
+
+    <div class="testi" data-testimonies style="--t-dur: 8s">
+      <div class="t-media" data-reveal="img" data-t-media>
+        <img class="is-active" src="assets/preaching.jpg" alt="" loading="lazy">
+        <img src="assets/worship-hands.jpg" alt="" loading="lazy">
+        <img src="assets/congregation.jpg" alt="" loading="lazy">
+        <span class="t-media__count" data-t-count>01 / 03</span>
+      </div>
+
+      <div data-reveal>
+        <span class="t-mark" aria-hidden="true">“</span>
+        <div class="t-slides" aria-live="polite">
+          <article class="t-slide is-active">
+            <blockquote><p>I came to Charis Tribe broken and without direction. Through the School of Maturity &amp; Ministry, the Word came alive in me. Within months God restored my marriage and opened a new business door I never could have imagined.</p></blockquote>
+            <div class="t-person"><span class="t-person__avatar"><img src="assets/preaching.jpg" alt="" loading="lazy"></span><div><strong>Adaeze Okonkwo</strong><span>Lagos campus</span></div></div>
+          </article>
+          <article class="t-slide" aria-hidden="true">
+            <blockquote><p>The doctors said it was terminal. My family and I held on to the teachings here — that healing is the children’s bread. Three months later every scan came back clear. Jesus is still performing miracles today.</p></blockquote>
+            <div class="t-person"><span class="t-person__avatar"><img src="assets/worship-hands.jpg" alt="" loading="lazy"></span><div><strong>Emeka Duru</strong><span>Abuja campus</span></div></div>
+          </article>
+          <article class="t-slide" aria-hidden="true">
+            <blockquote><p>Watching the live services from Canada, I found community I never expected online. The discipleship content helped me build a prayer life that transformed my career and my family. I am eternally grateful.</p></blockquote>
+            <div class="t-person"><span class="t-person__avatar"><img src="assets/congregation.jpg" alt="" loading="lazy"></span><div><strong>Blessing Taiwo</strong><span>Online campus</span></div></div>
+          </article>
+        </div>
+
+        <div class="t-controls">
+          <div class="t-bars" role="tablist" aria-label="Choose a testimony">
+            <button class="t-bar active" type="button" role="tab" aria-label="Testimony 1" aria-selected="true"><span></span></button>
+            <button class="t-bar" type="button" role="tab" aria-label="Testimony 2" aria-selected="false"><span></span></button>
+            <button class="t-bar" type="button" role="tab" aria-label="Testimony 3" aria-selected="false"><span></span></button>
+          </div>
+          <div class="t-arrows">
+            <button class="round-btn" type="button" aria-label="Previous testimony" data-t-prev><svg class="i"><use href="#i-arrow-l"/></svg></button>
+            <button class="round-btn" type="button" aria-label="Next testimony" data-t-next><svg class="i"><use href="#i-arrow-r"/></svg></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════
+     SECTION: 06 CORE VALUES — C.H.A.R.I.S
+     ════════════════════════════════════════════════════════════════ -->
+<section class="section t-flame" id="values" aria-labelledby="values-title">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-head__top" data-reveal>
+        <span class="eyebrow"><b>(06)</b><span class="rule"></span>Our core values</span>
+        <span class="eyebrow hide-sm">C.H.A.R.I.S</span>
+      </div>
+      <div class="sec-head__body">
+        <h2 class="display h-lg" id="values-title" data-split>Six letters. <em>One culture.</em></h2>
+        <div class="sec-head__aside" data-reveal>
+          <p class="lede">We are raising a community of world changers globally through C.H.A.R.I.S — a spiritual culture shaped by care, sound doctrine, responsibility and sacrificial love.</p>
+        </div>
+      </div>
+    </div>
+
+    <ol class="values-grid">
+      <li class="value" data-reveal>
+        <span class="value__idx"><span>01</span><svg class="i"><use href="#i-spark"/></svg></span>
+        <span class="value__letter" aria-hidden="true">C</span>
+        <div><p class="value__name">Care</p><p class="value__desc">We love people practically. No one walks alone in this house.</p></div>
+      </li>
+      <li class="value" data-reveal style="--d:.06s">
+        <span class="value__idx"><span>02</span><svg class="i"><use href="#i-spark"/></svg></span>
+        <span class="value__letter" aria-hidden="true">H</span>
+        <div><p class="value__name">Herald</p><p class="value__desc">We proclaim the good news of Jesus Christ — always, everywhere.</p></div>
+      </li>
+      <li class="value" data-reveal style="--d:.12s">
+        <span class="value__idx"><span>03</span><svg class="i"><use href="#i-spark"/></svg></span>
+        <span class="value__letter" aria-hidden="true">A</span>
+        <div><p class="value__name">Accountability</p><p class="value__desc">We grow in honest relationships that keep us faithful.</p></div>
+      </li>
+      <li class="value" data-reveal style="--d:.18s">
+        <span class="value__idx"><span>04</span><svg class="i"><use href="#i-spark"/></svg></span>
+        <span class="value__letter" aria-hidden="true">R</span>
+        <div><p class="value__name">Relationship</p><p class="value__desc">With God first, then with one another — real, lasting connection.</p></div>
+      </li>
+      <li class="value" data-reveal style="--d:.24s">
+        <span class="value__idx"><span>05</span><svg class="i"><use href="#i-spark"/></svg></span>
+        <span class="value__letter" aria-hidden="true">I</span>
+        <div><p class="value__name">Indoctrination</p><p class="value__desc">Grounded in sound doctrine and the finished work of Christ.</p></div>
+      </li>
+      <li class="value" data-reveal style="--d:.3s">
+        <span class="value__idx"><span>06</span><svg class="i"><use href="#i-spark"/></svg></span>
+        <span class="value__letter" aria-hidden="true">S</span>
+        <div><p class="value__name">Sacrifice</p><p class="value__desc">We give our best — time, talent and treasure — for the gospel.</p></div>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════
+     SECTION: 07 EVOLVE30 — Daily devotional
+     ════════════════════════════════════════════════════════════════ -->
+<section class="section t-ink" id="evolve30" aria-labelledby="evolve-title">
+  <div class="wrap">
+    <div class="evolve">
+      <div class="evolve__copy">
+        <span class="eyebrow" data-reveal><b>(07)</b><span class="rule"></span>Daily devotional · Evolve30</span>
+        <h2 class="display h-lg" id="evolve-title" data-split>Spiritual growth <em>beckons.</em></h2>
+        <p class="lede" data-reveal>Evolve30 brings Pastor Ransome’s daily devotionals into one focused rhythm of Scripture, declaration and meditation — helping you grow intentionally in the Word, every single day.</p>
+        <ul class="pillars" data-reveal>
+          <li><b>1</b>Scripture</li>
+          <li><b>2</b>Declaration</li>
+          <li><b>3</b>Meditation</li>
+        </ul>
+        <!-- Static demo: wire this form to /api/subscribe when moving into the Next.js app. -->
+        <form class="subscribe" data-form data-reveal novalidate>
+          <label class="sr-only" for="evolve-email">Email address</label>
+          <div class="field">
+            <input id="evolve-email" type="email" name="email" placeholder="Your email address" autocomplete="email" required>
+            <button class="btn btn--flame" type="submit">
+              <span class="btn__label"><span>Subscribe</span></span>
+              <span class="btn__icon"><svg class="i"><use href="#i-arrow-r"/></svg></span>
+            </button>
+          </div>
+          <p class="form-note" data-form-note>One devotional a day. Unsubscribe anytime.</p>
+        </form>
+      </div>
+
+      <div class="devo" aria-hidden="false">
+        <div class="devo__photo" data-reveal="img"><img src="assets/evolve30.jpg" alt="Believers studying the Bible together" loading="lazy" data-speed="0.07"></div>
+        <article class="devo__card" data-speed="-0.06" data-reveal style="--d:.2s">
+          <div class="devo__meta"><b>Evolve30 · Today</b><span data-today>—</span></div>
+          <h3>Spiritual growth <em>beckons</em></h3>
+          <p>Prioritise your spiritual growth and build a culture of Bible study — one day, one word, one step at a time.</p>
+          <div class="devo__foot"><span>Pastor Ransome Adewale</span><a href="https://charistribe.vercel.app/evolve30">Read today <svg class="i"><use href="#i-arrow-ur"/></svg></a></div>
+        </article>
+        <div class="devo__sticker" data-speed="0.1" aria-hidden="true"><div><strong>Daily</strong><span>evolve30.org</span></div></div>
+      </div>
+    </div>
+
+    <!-- All-week channels (real links from the live site footer) -->
+    <div class="channels">
+      <a class="channel" href="https://www.youtube.com/@charistribe" target="_blank" rel="noopener noreferrer" data-reveal>
+        <span class="channel__top"><span class="channel__icon"><svg class="i"><use href="#i-youtube"/></svg></span><svg class="i channel__go"><use href="#i-arrow-ur"/></svg></span>
+        <span><strong>Watch</strong><span>Services &amp; sermons on YouTube</span></span>
+      </a>
+      <a class="channel" href="https://open.spotify.com/show/2x6sk8Gp1cCHPs2hdPdaan" target="_blank" rel="noopener noreferrer" data-reveal style="--d:.06s">
+        <span class="channel__top"><span class="channel__icon"><svg class="i"><use href="#i-spotify"/></svg></span><svg class="i channel__go"><use href="#i-arrow-ur"/></svg></span>
+        <span><strong>Listen</strong><span>The Charis Tribe podcast</span></span>
+      </a>
+      <a class="channel" href="https://t.me/charistribe" target="_blank" rel="noopener noreferrer" data-reveal style="--d:.12s">
+        <span class="channel__top"><span class="channel__icon"><svg class="i"><use href="#i-pray"/></svg></span><svg class="i channel__go"><use href="#i-arrow-ur"/></svg></span>
+        <span><strong>Pray</strong><span>Join Global Prayer on Telegram</span></span>
+      </a>
+      <a class="channel" href="https://charistribe.vercel.app/evolve30" data-reveal style="--d:.18s">
+        <span class="channel__top"><span class="channel__icon"><svg class="i"><use href="#i-book"/></svg></span><svg class="i channel__go"><use href="#i-arrow-ur"/></svg></span>
+        <span><strong>Read</strong><span>Today’s Evolve30 devotional</span></span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════
+     SECTION: 08 GIVE
+     ════════════════════════════════════════════════════════════════ -->
+<section class="section t-bone" id="give" aria-labelledby="give-title">
+  <div class="wrap give">
+    <div class="give__copy">
+      <span class="eyebrow" data-reveal><b>(08)</b><span class="rule"></span>Giving</span>
+      <h2 class="display h-lg" id="give-title" data-split>Your generosity <em>fuels</em> the mission.</h2>
+      <blockquote class="scripture" data-reveal>
+        <p>“So let each one give as he purposes in his heart, not grudgingly or of necessity; for God loves a cheerful giver.”</p>
+        <cite>II Corinthians 9:7</cite>
+      </blockquote>
+      <p class="copy" data-reveal>Every gift strengthens discipleship, extends the gospel and raises world changers globally. Thank you for sowing into the mission.</p>
+      <div class="btn-row" data-reveal>
+        <a class="btn btn--flame" href="https://charistribe.vercel.app/give">
+          <span class="btn__label"><span>Give online</span></span>
+          <span class="btn__icon"><svg class="i"><use href="#i-arrow-ur"/></svg></span>
+        </a>
+        <a class="btn btn--line" href="https://charistribe.vercel.app/give">
+          <span class="btn__label"><span>Building project</span></span>
+          <span class="btn__icon"><svg class="i"><use href="#i-arrow-ur"/></svg></span>
+        </a>
+      </div>
+    </div>
+
+    <div>
+      <!-- Lightweight YouTube: loads the real player only on click. Change data-yt to another video ID. -->
+      <button class="yt" type="button" data-yt="2_nH28qkzP8" data-reveal="img" aria-label="Play video: Give towards the mission">
+        <img src="assets/stage-worship.jpg" alt="" loading="lazy">
+        <span class="yt__play" aria-hidden="true"><svg class="i"><use href="#i-play"/></svg></span>
+        <span class="yt__label"><span>Watch the film<strong>Give towards the mission</strong></span><span>Charis Tribe</span></span>
+      </button>
+      <ul class="impact" data-reveal>
+        <li><strong><svg class="i"><use href="#i-spark"/></svg>Missions</strong><span>Reaching nations with the gospel of grace.</span></li>
+        <li><strong><svg class="i"><use href="#i-spark"/></svg>Campus growth</strong><span>Establishing communities globally.</span></li>
+        <li><strong><svg class="i"><use href="#i-spark"/></svg>Discipleship</strong><span>Raising grounded, deployed believers.</span></li>
+        <li><strong><svg class="i"><use href="#i-spark"/></svg>Welfare</strong><span>Meeting real needs with real love.</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════
+     SECTION: CLOSING CTA
+     ════════════════════════════════════════════════════════════════ -->
+<section class="cta" aria-labelledby="cta-title">
+  <div class="cta__bg"><img src="assets/congregation.jpg" alt="" loading="lazy" data-speed="0.12"></div>
+  <div class="wrap">
+    <img class="cta__script" src="assets/good-news-always.png" alt="Good News Always" loading="lazy" data-reveal>
+    <h2 class="display h-xl" id="cta-title" data-split>There’s a seat saved <em>for you.</em></h2>
+    <p class="lede" data-reveal>Whether it’s your first Sunday or your hundredth — come as you are. You’ll find a family, the Word, and the presence of God.</p>
+    <div class="btn-row" data-reveal>
+      <a class="btn btn--flame" href="https://charistribe.vercel.app/first-timer" data-magnetic>
+        <span class="btn__label"><span>Plan your first visit</span></span>
+        <span class="btn__icon"><svg class="i"><use href="#i-arrow-ur"/></svg></span>
+      </a>
+      <a class="btn btn--glass" href="https://www.youtube.com/@charistribe" target="_blank" rel="noopener noreferrer" data-magnetic>
+        <span class="btn__label"><span>Watch online</span></span>
+        <span class="btn__icon"><svg class="i"><use href="#i-play"/></svg></span>
+      </a>
+    </div>
+    <p class="cta__times" data-reveal>
+      <span><svg class="i"><use href="#i-clock"/></svg>Sundays 8:00 AM</span>
+      <span><svg class="i"><use href="#i-clock"/></svg>Wednesdays 6:00 PM</span>
+      <span><svg class="i"><use href="#i-pin"/></svg>Akowonjo, Lagos</span>
+    </p>
+  </div>
+</section>
+
+</main>
+
+<!-- ════════════════════════════════════════════════════════════════
+     SECTION: FOOTER
+     ════════════════════════════════════════════════════════════════ -->
+<footer class="footer t-ink">
+  <div class="wrap">
+    <div class="footer__news">
+      <h2 class="display h-md" data-split>Get inspirational content <em>and updates.</em></h2>
+      <!-- Static demo: wire to the newsletter endpoint in the app. -->
+      <form data-form data-reveal novalidate>
+        <label class="sr-only" for="news-email">Email address</label>
+        <div class="field">
+          <input id="news-email" type="email" name="email" placeholder="user@example.com" autocomplete="email" required>
+          <button class="btn btn--bone" type="submit">
+            <span class="btn__label"><span>Subscribe</span></span>
+            <span class="btn__icon"><svg class="i"><use href="#i-arrow-r"/></svg></span>
+          </button>
+        </div>
+        <p class="form-note" data-form-note>Sermons, events and devotionals — no spam, ever.</p>
+      </form>
+    </div>
+
+    <div class="footer__grid">
+      <div class="footer__brand">
+        <img src="assets/logo-lockup.png" alt="Charis Tribe — Good News Always" loading="lazy" width="250" height="82">
+        <p>Raising a community of world changers globally. Heralding the love of Jesus Christ and the ministry of the Holy Spirit.</p>
+        <div class="footer__addr">
+          <span>BEN Auto Event Place, Santos Layout, Akowonjo, Lagos</span>
+          <span>Sundays 8:00 AM · Wednesdays 6:00 PM</span>
+        </div>
+        <div class="socials">
+          <a href="https://www.instagram.com/charistribeglobal" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><svg class="i"><use href="#i-instagram"/></svg></a>
+          <a href="https://www.youtube.com/@charistribe" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><svg class="i"><use href="#i-youtube"/></svg></a>
+          <a href="https://www.facebook.com/charistribeglobal" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><svg class="i"><use href="#i-facebook"/></svg></a>
+          <a href="https://x.com/charistribe" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)"><svg class="i"><use href="#i-x"/></svg></a>
+        </div>
+      </div>
+
+      <div class="footer__cols">
+        <div>
+          <h3>Connect</h3>
+          <ul>
+            <li><a href="https://charistribe.vercel.app/first-timer">First Timer</a></li>
+            <li><a href="https://charistribe.vercel.app/contact">Membership Class</a></li>
+            <li><a href="https://charistribe.vercel.app/contact">Charis Force</a></li>
+            <li><a href="https://charistribe.vercel.app/contact">Contact Us</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3>Ministries</h3>
+          <ul>
+            <li><a href="https://charistribe.vercel.app/ministries">Missions</a></li>
+            <li><a href="https://charistribe.vercel.app/ministries#youth">Charis Kids</a></li>
+            <li><a href="https://charistribe.vercel.app/ministries#worship">Celebrations</a></li>
+            <li><a href="https://charistribe.vercel.app/ministries#worship">Charis Worship</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3>Resources</h3>
+          <ul>
+            <li><a href="https://open.spotify.com/show/2x6sk8Gp1cCHPs2hdPdaan" target="_blank" rel="noopener noreferrer">Podcast</a></li>
+            <li><a href="https://charistribe.vercel.app/counselling">Counselling</a></li>
+            <li><a href="https://t.me/charistribe" target="_blank" rel="noopener noreferrer">Global Prayer</a></li>
+            <li><a href="https://charistribe.vercel.app/evolve30">Daily Devotional</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3>Community</h3>
+          <ul>
+            <li><a href="https://bit.ly/charistribelagos" target="_blank" rel="noopener noreferrer">Lagos</a></li>
+            <li><a href="https://bit.ly/charistribeibadan" target="_blank" rel="noopener noreferrer">Ibadan</a></li>
+            <li><a href="https://bit.ly/charistribeabuja" target="_blank" rel="noopener noreferrer">Abuja</a></li>
+            <li><a href="https://bit.ly/mycharistribecanada" target="_blank" rel="noopener noreferrer">Canada</a></li>
+            <li><a href="https://bit.ly/charistribeuk" target="_blank" rel="noopener noreferrer">UK</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <p class="footer__word" aria-hidden="true">Charis <em>Tribe</em></p>
+
+    <div class="footer__bottom">
+      <p>© <span data-year>2026</span> Charis Tribe Global Church. All rights reserved.</p>
+      <p>Good News Always.</p>
+      <a class="to-top" href="#top">Back to top <span><svg class="i"><use href="#i-arrow-up"/></svg></span></a>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* =============================================================================
+   CHARIS TRIBE — page behaviour (vanilla JS, no dependencies)
+   Each feature is isolated with safe() so one failure never breaks the page.
+   ============================================================================= */
+document.documentElement.classList.add('ready');
+
+(function () {
+  'use strict';
+  var d = document, root = d.documentElement;
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  function safe(fn) { try { fn(); } catch (err) { console.error(err); } }
+  function $(s, ctx) { return (ctx || d).querySelector(s); }
+  function $$(s, ctx) { return Array.prototype.slice.call((ctx || d).querySelectorAll(s)); }
+  function clamp(v, a, b) { return Math.min(b, Math.max(a, v)); }
+
+  /* ---------------------------------------------------------------------------
+     SERVICE_SCHEDULE — times are in Lagos time (WAT, UTC+1, no daylight saving).
+     day: 0 = Sunday … 6 = Saturday. durationMin = how long the "Live now" state lasts.
+     --------------------------------------------------------------------------- */
+  var SERVICE_SCHEDULE = [
+    { name: 'Sunday Service',  day: 0, hour: 8,  minute: 0, durationMin: 180, short: 'Sun · 8:00 AM WAT' },
+    { name: 'Midweek Service', day: 3, hour: 18, minute: 0, durationMin: 120, short: 'Wed · 6:00 PM WAT' }
+  ];
+  var WAT_OFFSET_MIN = 60;
+
+  /* Split text into word spans (keeps <em> and [data-token] elements). */
+  function splitWords(el, cls) {
+    var words = [];
+    (function walk(node) {
+      Array.prototype.slice.call(node.childNodes).forEach(function (n) {
+        if (n.nodeType === 3) {
+          var parts = n.textContent.split(/(\s+)/), frag = d.createDocumentFragment();
+          parts.forEach(function (p) {
+            if (!p) return;
+            if (/^\s+$/.test(p)) { frag.appendChild(d.createTextNode(' ')); return; }
+            var o = d.createElement('span'); o.className = cls;
+            var i = d.createElement('span'); i.className = cls + '__i'; i.textContent = p;
+            o.appendChild(i); frag.appendChild(o); words.push(o);
+          });
+          n.parentNode.replaceChild(frag, n);
+        } else if (n.nodeType === 1) {
+          if (n.hasAttribute('data-token')) { n.classList.add(cls); words.push(n); }
+          else walk(n);
+        }
+      });
+    })(el);
+    return words;
+  }
+
+  /* 1. Headings: word-by-word rise ---------------------------------------- */
+  safe(function () {
+    $$('[data-split]').forEach(function (el) {
+      splitWords(el, 'w').forEach(function (w, i) { w.firstChild && w.firstChild.style && w.firstChild.style.setProperty('--i', i); });
+    });
+  });
+
+  /* 2. Scroll reveals ------------------------------------------------------ */
+  safe(function () {
+    var targets = $$('[data-reveal], [data-split]:not(.hero h1)');
+    if (!('IntersectionObserver' in window) || reduceMotion) { targets.forEach(function (t) { t.classList.add('is-in'); }); return; }
+    // Image reveals start fully clipped, and a clipped element never "intersects" —
+    // so those are observed through their parent instead.
+    var groups = new Map();
+    targets.forEach(function (t) {
+      var watch = t.getAttribute('data-reveal') === 'img' ? t.parentElement : t;
+      if (!groups.has(watch)) groups.set(watch, []);
+      groups.get(watch).push(t);
+    });
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        groups.get(e.target).forEach(function (t) { t.classList.add('is-in'); });
+        io.unobserve(e.target);
+      });
+    }, { rootMargin: '0px 0px -10% 0px', threshold: 0.08 });
+    groups.forEach(function (_, watch) { io.observe(watch); });
+  });
+
+  /* 3. Intro + hero entrance ---------------------------------------------- */
+  safe(function () {
+    var intro = $('.intro'), hero = $('[data-hero-section]'), h1 = $('.hero h1');
+    function startHero() { hero.classList.add('is-in'); h1.classList.add('is-in'); }
+    var seen = root.classList.contains('intro-seen');
+    if (seen || reduceMotion || !intro) { if (intro) intro.classList.add('is-done'); requestAnimationFrame(function () { setTimeout(startHero, 60); }); return; }
+    try { sessionStorage.setItem('ct-intro', '1'); } catch (e) {}
+    var fontLink = d.getElementById('font-css');
+    var cssReady = new Promise(function (r) {
+      if (!fontLink || fontLink.media === 'all') return r();
+      fontLink.addEventListener('load', r); fontLink.addEventListener('error', r);
+    });
+    var fontsReady = cssReady.then(function () {
+      return d.fonts ? d.fonts.load('400 1em "Instrument Serif"').then(function () { return d.fonts.ready; }) : null;
+    });
+    var minTime = new Promise(function (r) { setTimeout(r, 1350); });
+    var maxTime = new Promise(function (r) { setTimeout(r, 2600); });
+    Promise.race([Promise.all([fontsReady, minTime]), maxTime]).then(function () {
+      intro.classList.add('is-leaving');
+      setTimeout(startHero, 280);
+      setTimeout(function () { intro.classList.add('is-done'); }, 1150);
+    });
+  });
+
+  /* 4. Scroll-linked: header, progress, parallax, statement scrub --------- */
+  safe(function () {
+    var header = $('[data-header]'), progress = $('[data-progress]');
+    var parallax = $$('[data-speed]');
+    var scrubs = $$('[data-scrub]').map(function (el) { return { el: el, words: splitWords(el, 'sw') }; });
+    var lastY = window.scrollY, ticking = false;
+
+    function update() {
+      ticking = false;
+      var y = window.scrollY, vh = window.innerHeight;
+      var docH = root.scrollHeight - vh;
+
+      if (header && !root.classList.contains('menu-open')) {
+        header.classList.toggle('is-scrolled', y > 30);
+        var dy = y - lastY;
+        if (y > 520 && dy > 6) header.classList.add('is-hidden');
+        else if (dy < -6 || y < 520) header.classList.remove('is-hidden');
+      }
+      if (Math.abs(y - lastY) > 6) lastY = y;
+      if (progress) progress.style.transform = 'scaleX(' + (docH > 0 ? y / docH : 0).toFixed(4) + ')';
+
+      if (!reduceMotion) {
+        parallax.forEach(function (el) {
+          var box = el.parentElement.getBoundingClientRect();
+          if (box.bottom < -100 || box.top > vh + 100) return;
+          var offset = (box.top + box.height / 2) - vh / 2;
+          el.style.translate = '0 ' + (-offset * parseFloat(el.getAttribute('data-speed'))).toFixed(1) + 'px';
+        });
+      }
+
+      scrubs.forEach(function (s) {
+        var r = s.el.getBoundingClientRect();
+        var p = clamp((vh * 0.82 - r.top) / (r.height + vh * 0.25), 0, 1);
+        var n = Math.round(p * s.words.length * 1.08);
+        s.words.forEach(function (w, i) { w.classList.toggle('on', i < n); });
+      });
+    }
+    function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(update); } }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    update();
+  });
+
+  /* 5. Next service countdown + live state -------------------------------- */
+  safe(function () {
+    var box = $('[data-next-service]'), pill = $('[data-live-pill]'), pillText = $('[data-live-text]');
+    var countEl = $('[data-ns-count]'), whenEl = $('[data-ns-when]'), labelEl = $('[data-ns-label]');
+    var nums = countEl ? $$('b', countEl) : [];
+
+    function nextService(now) {
+      var off = WAT_OFFSET_MIN * 60000, wat = new Date(now + off), best = null;
+      SERVICE_SCHEDULE.forEach(function (s) {
+        for (var add = -1; add <= 7; add++) {
+          var start = Date.UTC(wat.getUTCFullYear(), wat.getUTCMonth(), wat.getUTCDate() + add, s.hour, s.minute) - off;
+          if (new Date(start + off).getUTCDay() !== s.day) continue;
+          var end = start + s.durationMin * 60000;
+          if (end <= now) continue;
+          if (!best || start < best.start) best = { s: s, start: start, end: end, live: now >= start };
+          break;
+        }
+      });
+      return best;
+    }
+    function pad(n) { return (n < 10 ? '0' : '') + n; }
+    function localTime(ts) {
+      try {
+        var userOffset = -new Date(ts).getTimezoneOffset();
+        if (userOffset === WAT_OFFSET_MIN) return '';
+        return ' · ' + new Date(ts).toLocaleTimeString([], { weekday: 'short', hour: 'numeric', minute: '2-digit' }) + ' your time';
+      } catch (e) { return ''; }
+    }
+    function tick() {
+      var now = Date.now(), n = nextService(now);
+      if (!n) return;
+      if (n.live) {
+        box && box.classList.add('is-live');
+        if (labelEl) labelEl.textContent = 'Live now';
+        if (countEl) countEl.innerHTML = '<span style="font-family:var(--serif);font-size:1.35em;letter-spacing:-.01em">Join the stream →</span>';
+        if (whenEl) whenEl.textContent = n.s.name + ' is happening now';
+        if (pill) { pill.classList.add('is-live'); pillText.textContent = 'Live now'; }
+        return;
+      }
+      box && box.classList.remove('is-live');
+      if (pill) { pill.classList.remove('is-live'); pillText.textContent = 'Next · ' + n.s.short.replace(' WAT', ''); }
+      var diff = Math.max(0, n.start - now), s = Math.floor(diff / 1000);
+      var parts = [Math.floor(s / 86400), Math.floor(s % 86400 / 3600), Math.floor(s % 3600 / 60), s % 60];
+      if (nums.length === 4) parts.forEach(function (v, i) { nums[i].textContent = pad(v); });
+      if (whenEl) whenEl.textContent = n.s.name + ' · ' + n.s.short + localTime(n.start);
+    }
+    tick(); setInterval(tick, 1000);
+    if (box) {
+      box.style.cursor = 'pointer';
+      box.addEventListener('click', function (e) {
+        if (box.classList.contains('is-live') && e.target.tagName !== 'A') window.open('https://www.youtube.com/@charistribe', '_blank', 'noopener');
+      });
+    }
+  });
+
+  /* 6. Campus list — floating image preview (desktop) --------------------- */
+  safe(function () {
+    var list = $('[data-campus-list]'), prev = $('[data-cursor-preview]');
+    if (!list || !prev || !finePointer || reduceMotion) return;
+    var imgs = $$('img', prev), mx = 0, my = 0, x = 0, y = 0, raf = null;
+    imgs.forEach(function (im) { im.loading = 'eager'; });
+    function tick() {
+      var dx = mx - x, dy = my - y;
+      x += dx * 0.16; y += dy * 0.16;
+      prev.style.translate = (x - prev.offsetWidth / 2) + 'px ' + (y - prev.offsetHeight / 2) + 'px';
+      prev.style.rotate = clamp(dx * 0.07, -10, 10).toFixed(2) + 'deg';
+      raf = (Math.abs(dx) > 0.2 || Math.abs(dy) > 0.2) ? requestAnimationFrame(tick) : null;
+    }
+    list.addEventListener('pointerenter', function (e) { x = mx = e.clientX; y = my = e.clientY; });
+    list.addEventListener('pointermove', function (e) { mx = e.clientX; my = e.clientY; if (!raf) raf = requestAnimationFrame(tick); });
+    $$('a[data-preview]', list).forEach(function (a) {
+      a.addEventListener('pointerenter', function () {
+        var idx = +a.getAttribute('data-preview');
+        imgs.forEach(function (im, j) { im.classList.toggle('is-active', j === idx); });
+        prev.classList.add('is-visible');
+      });
+    });
+    list.addEventListener('pointerleave', function () { prev.classList.remove('is-visible'); });
+    window.addEventListener('scroll', function () { prev.classList.remove('is-visible'); }, { passive: true });
+  });
+
+  /* 7. Testimonies slider -------------------------------------------------- */
+  safe(function () {
+    var t = $('[data-testimonies]'); if (!t) return;
+    var slides = $$('.t-slide', t), media = $$('[data-t-media] img', t), bars = $$('.t-bar', t), count = $('[data-t-count]', t);
+    var idx = 0, len = slides.length;
+    function show(n) {
+      idx = (n + len) % len;
+      slides.forEach(function (s, i) { s.classList.toggle('is-active', i === idx); s.setAttribute('aria-hidden', i === idx ? 'false' : 'true'); });
+      media.forEach(function (m, i) { m.classList.toggle('is-active', i === idx); });
+      bars.forEach(function (b, i) { b.classList.toggle('done', i < idx); b.classList.remove('active'); b.setAttribute('aria-selected', i === idx ? 'true' : 'false'); });
+      void bars[idx].offsetWidth;
+      bars[idx].classList.add('active');
+      if (count) count.textContent = pad(idx + 1) + ' / ' + pad(len);
+    }
+    function pad(n) { return (n < 10 ? '0' : '') + n; }
+    bars.forEach(function (b, i) {
+      b.addEventListener('click', function () { show(i); });
+      b.firstElementChild.addEventListener('animationend', function () { if (i === idx) show(idx + 1); });
+    });
+    $('[data-t-prev]', t).addEventListener('click', function () { show(idx - 1); });
+    $('[data-t-next]', t).addEventListener('click', function () { show(idx + 1); });
+    function pause(on) { t.classList.toggle('is-paused', on); }
+    t.addEventListener('pointerenter', function () { pause(true); });
+    t.addEventListener('pointerleave', function () { pause(false); });
+    t.addEventListener('focusin', function () { pause(true); });
+    t.addEventListener('focusout', function () { pause(false); });
+    if (reduceMotion) t.style.setProperty('--t-dur', '0s'), t.classList.add('is-paused');
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (e) { if (!t.matches(':hover')) pause(!e[0].isIntersecting); }, { threshold: 0.25 }).observe(t);
+    }
+    // swipe on touch
+    var sx = null, mediaBox = $('[data-t-media]', t);
+    mediaBox.addEventListener('pointerdown', function (e) { sx = e.clientX; });
+    mediaBox.addEventListener('pointerup', function (e) { if (sx === null) return; var dx = e.clientX - sx; if (Math.abs(dx) > 40) show(idx + (dx < 0 ? 1 : -1)); sx = null; });
+    show(0);
+  });
+
+  /* 8. Gatherings — expanding panels -------------------------------------- */
+  safe(function () {
+    var panels = $$('[data-panels] .panel');
+    function activate(p) { panels.forEach(function (x) { x.classList.toggle('is-active', x === p); }); }
+    panels.forEach(function (p) {
+      if (finePointer) p.addEventListener('pointerenter', function () { activate(p); });
+      p.addEventListener('focusin', function () { activate(p); });
+      p.addEventListener('click', function () { activate(p); });
+    });
+  });
+
+  /* 9. Magnetic buttons ---------------------------------------------------- */
+  safe(function () {
+    if (!finePointer || reduceMotion) return;
+    $$('[data-magnetic]').forEach(function (el) {
+      el.addEventListener('pointermove', function (e) {
+        var r = el.getBoundingClientRect();
+        el.style.translate = ((e.clientX - r.left - r.width / 2) * 0.22).toFixed(1) + 'px ' + ((e.clientY - r.top - r.height / 2) * 0.3).toFixed(1) + 'px';
+      });
+      el.addEventListener('pointerleave', function () { el.style.translate = ''; });
+    });
+  });
+
+  /* 10. Mobile menu -------------------------------------------------------- */
+  safe(function () {
+    var btn = $('[data-menu-btn]'), menu = $('[data-menu]'); if (!btn || !menu) return;
+    function setOpen(open) {
+      root.classList.toggle('menu-open', open);
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      if (open) { var first = $('a', menu); setTimeout(function () { first && first.focus({ preventScroll: true }); }, 300); }
+    }
+    btn.addEventListener('click', function () { setOpen(!root.classList.contains('menu-open')); });
+    $$('a', menu).forEach(function (a) { a.addEventListener('click', function () { setOpen(false); }); });
+    d.addEventListener('keydown', function (e) { if (e.key === 'Escape' && root.classList.contains('menu-open')) { setOpen(false); btn.focus(); } });
+  });
+
+  /* 11. Hero video play / pause ------------------------------------------- */
+  safe(function () {
+    var v = $('[data-hero-video]'), toggles = $$('[data-video-toggle]'); if (!v) return;
+    function sync() {
+      var paused = v.paused;
+      toggles.forEach(function (t) {
+        t.setAttribute('aria-pressed', paused ? 'true' : 'false');
+        var l = $('.video-toggle__label', t); if (l) l.textContent = paused ? 'Play' : 'Pause';
+        t.setAttribute('aria-label', paused ? 'Play background video' : 'Pause background video');
+      });
+    }
+    if (reduceMotion) { v.removeAttribute('autoplay'); v.pause(); }
+    toggles.forEach(function (t) { t.addEventListener('click', function () { v.paused ? v.play() : v.pause(); }); });
+    v.addEventListener('play', sync); v.addEventListener('pause', sync); sync();
+  });
+
+  /* 12. Lightweight YouTube embed ----------------------------------------- */
+  safe(function () {
+    $$('[data-yt]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var id = btn.getAttribute('data-yt');
+        var f = d.createElement('iframe');
+        f.src = 'https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&rel=0';
+        f.title = btn.getAttribute('aria-label') || 'YouTube video';
+        f.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+        f.allowFullscreen = true; f.referrerPolicy = 'strict-origin-when-cross-origin';
+        var wrap = d.createElement('div'); wrap.className = btn.className; wrap.appendChild(f);
+        btn.replaceWith(wrap);
+      });
+    });
+  });
+
+  /* 13. Forms (static demo) ----------------------------------------------- */
+  safe(function () {
+    $$('[data-form]').forEach(function (form) {
+      var note = $('[data-form-note]', form), input = $('input[type=email]', form);
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        if (!input.checkValidity() || !input.value) { note.textContent = 'Please enter a valid email address.'; note.classList.remove('is-success'); input.focus(); return; }
+        note.textContent = 'Thank you — you’re on the list. Good news is on its way.';
+        note.classList.add('is-success'); form.reset();
+      });
+    });
+  });
+
+  /* 14. Small details ------------------------------------------------------ */
+  safe(function () {
+    var y = $('[data-year]'); if (y) y.textContent = new Date().getFullYear();
+    var t = $('[data-today]');
+    if (t) t.textContent = new Date().toLocaleDateString(undefined, { weekday: 'short', day: 'numeric', month: 'short' });
+  });
+})();
+</script>
+</body>
+</html>
