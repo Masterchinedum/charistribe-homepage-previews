@@ -106,7 +106,7 @@ button, input { font: inherit; color: inherit; }
 button { background: none; border: 0; padding: 0; cursor: pointer; }
 h1, h2, h3, h4, p, blockquote, figure, ul, ol { margin: 0; }
 ul, ol { padding: 0; list-style: none; }
-::selection { background: var(--flame); color: var(--ink); }
+::selection { background: var(--flame); color: var(--bone); }
 :focus-visible { outline: 2px solid var(--flame); outline-offset: 3px; border-radius: 8px; }
 
 .sr-only { position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
@@ -131,7 +131,7 @@ body::after {
 .t-ink   { --bg: var(--ink);   --fg: var(--bone); --muted: var(--muted-d); --faint: var(--faint-d); --line: var(--line-d); --accent: var(--flame); --accent-text: var(--flame); background: var(--bg); color: var(--fg); }
 .t-ink2  { --bg: var(--ink-2); --fg: var(--bone); --muted: var(--muted-d); --faint: var(--faint-d); --line: var(--line-d); --accent: var(--flame); --accent-text: var(--flame); background: var(--bg); color: var(--fg); }
 .t-bone  { --bg: var(--bone);  --fg: var(--ink);  --muted: var(--muted-l); --faint: var(--faint-l); --line: var(--line-l); --accent: var(--flame); --accent-text: var(--flame-ink); background: var(--bg); color: var(--fg); }
-.t-flame { --bg: var(--flame); --fg: var(--ink);  --muted: rgba(12,10,9,.74); --faint: rgba(12,10,9,.55); --line: rgba(12,10,9,.22); --accent: var(--ink); --accent-text: var(--ink); background: var(--bg); color: var(--fg); }
+.t-flame { --bg: var(--flame); --fg: var(--bone); --muted: rgba(255,255,255,.84); --faint: rgba(255,255,255,.65); --line: rgba(255,255,255,.22); --accent: var(--bone); --accent-text: var(--bone); background: var(--bg); color: var(--fg); }
 
 /* ==========================================================================
    4. TYPOGRAPHY
@@ -326,7 +326,7 @@ body::after {
   backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
   font: 500 11.5px/1.3 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: rgba(255,255,255,.84);
 }
-.hero__kicker .tag { background: var(--flame); color: var(--ink); padding: 7px 12px; border-radius: 999px; }
+.hero__kicker .tag { background: var(--flame); color: var(--bone); padding: 7px 12px; border-radius: 999px; }
 .kicker-long { display: none; }
 @media (min-width: 620px) { .kicker-long { display: inline; } .kicker-short { display: none; } }
 @media (max-width: 379px) {
@@ -403,7 +403,7 @@ body::after {
 /* ==========================================================================
    9. MARQUEE
    ========================================================================== */
-.marquee { overflow: hidden; padding: 22px 0 24px; border-block: 1px solid rgba(12,10,9,.12); }
+.marquee { overflow: hidden; padding: 22px 0 24px; border-block: 1px solid rgba(255,255,255,.22); }
 .marquee__track { display: flex; width: max-content; animation: marquee 42s linear infinite; }
 .marquee:hover .marquee__track { animation-play-state: paused; }
 .marquee__group { display: flex; align-items: center; flex: none; gap: clamp(22px, 3vw, 46px); padding-right: clamp(22px, 3vw, 46px); }
@@ -480,7 +480,7 @@ body::after {
 .step__desc { margin-top: 4px; font-size: 14px; color: var(--muted); transition: color .4s; }
 .step:hover .step__desc { color: var(--muted-d); }
 .step__arrow { width: 46px; height: 46px; border-radius: 50%; border: 1px solid var(--line); display: grid; place-items: center; font-size: 18px; transition: background-color .4s, color .4s, border-color .4s, rotate .6s var(--ease); }
-.step:hover .step__arrow { background: var(--flame); color: var(--ink); border-color: var(--flame); rotate: 45deg; }
+.step:hover .step__arrow { background: var(--flame); color: var(--bone); border-color: var(--flame); rotate: 45deg; }
 @media (min-width: 1000px) {
   .welcome__grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: start; }
   .welcome__copy { padding-top: 40px; }
@@ -506,7 +506,7 @@ body::after {
 .campus__thumb { width: 64px; height: 64px; border-radius: 14px; overflow: hidden; flex: none; background: var(--ink-3); }
 .campus__thumb img { width: 100%; height: 100%; object-fit: cover; }
 .campus__arrow { width: clamp(46px, 4.4vw, 62px); height: clamp(46px, 4.4vw, 62px); border-radius: 50%; border: 1px solid var(--line); display: none; place-items: center; font-size: 20px; transition: background-color .4s, color .4s, border-color .4s, rotate .6s var(--ease); }
-.campus a:hover .campus__arrow { background: var(--flame); color: var(--ink); border-color: var(--flame); rotate: 45deg; }
+.campus a:hover .campus__arrow { background: var(--flame); color: var(--bone); border-color: var(--flame); rotate: 45deg; }
 .campus-foot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 24px; align-items: center; margin-top: 40px; color: var(--muted); font-size: 15px; }
 
 .cursor-preview { position: fixed; left: 0; top: 0; z-index: 60; width: 280px; height: 350px; border-radius: 20px; overflow: hidden; pointer-events: none; opacity: 0; scale: .55; transition: opacity .35s ease, scale .6s var(--ease); background: var(--ink-3); box-shadow: 0 40px 80px -30px rgba(0,0,0,.8); }
@@ -654,7 +654,7 @@ body::after {
 .evolve__copy h2 { margin: 26px 0 26px; }
 .pillars { display: flex; flex-wrap: wrap; gap: 8px; margin: 30px 0 36px; }
 .pillars li { display: inline-flex; align-items: center; gap: 10px; padding: 9px 15px 9px 10px; border-radius: 999px; border: 1px solid var(--line); font-size: 13.5px; font-weight: 500; }
-.pillars li b { width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; background: var(--flame); color: var(--ink); font: 500 10px/1 var(--mono); }
+.pillars li b { width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; background: var(--flame); color: var(--bone); font: 500 10px/1 var(--mono); }
 
 .field { display: flex; align-items: center; gap: 6px; padding: 6px; border-radius: 999px; border: 1px solid var(--line); background: rgba(255,255,255,.04); max-width: 520px; transition: border-color .3s, background-color .3s; }
 .t-bone .field { background: rgba(255,255,255,.5); }
@@ -681,7 +681,7 @@ body::after {
 .devo__card p { font-size: 14px; line-height: 1.6; color: var(--muted-l); }
 .devo__foot { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--line-l); font-size: 13px; font-weight: 600; }
 .devo__foot a { display: inline-flex; align-items: center; gap: 6px; color: var(--flame-ink); }
-.devo__sticker { position: absolute; left: 6%; bottom: 6%; width: clamp(96px, 11vw, 124px); aspect-ratio: 1; border-radius: 50%; background: var(--flame); color: var(--ink); display: grid; place-items: center; text-align: center; rotate: -12deg; box-shadow: 0 20px 40px -14px rgba(255,69,0,.6); }
+.devo__sticker { position: absolute; left: 6%; bottom: 6%; width: clamp(96px, 11vw, 124px); aspect-ratio: 1; border-radius: 50%; background: var(--flame); color: var(--bone); display: grid; place-items: center; text-align: center; rotate: -12deg; box-shadow: 0 20px 40px -14px rgba(255,69,0,.6); }
 .devo__sticker strong { display: block; font: italic 400 clamp(1.8rem, 2.6vw, 2.3rem)/.9 var(--serif); }
 .devo__sticker span { display: block; margin-top: 4px; font: 500 9.5px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; }
 
@@ -690,7 +690,7 @@ body::after {
 .channel:hover { background: var(--bone); color: var(--ink); border-color: var(--bone); translate: 0 -4px; }
 .channel__top { display: flex; justify-content: space-between; align-items: center; }
 .channel__icon { width: 44px; height: 44px; border-radius: 50%; background: rgba(255,255,255,.08); display: grid; place-items: center; font-size: 20px; transition: background-color .45s, color .45s; }
-.channel:hover .channel__icon { background: var(--flame); color: var(--ink); }
+.channel:hover .channel__icon { background: var(--flame); color: var(--bone); }
 .channel__go { font-size: 18px; color: var(--faint); transition: rotate .5s var(--ease), color .3s; }
 .channel:hover .channel__go { rotate: 45deg; color: var(--ink); }
 .channel strong { display: block; font: 400 clamp(1.5rem, 2vw, 1.9rem)/1 var(--serif); letter-spacing: -.01em; }
